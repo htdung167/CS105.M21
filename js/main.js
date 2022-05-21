@@ -29,9 +29,11 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    // const axesHelper = new AxesHelper(15);
-    // const cube = this.createCube();
-    // this.scene.add(cube);
+    const axesHelper = new AxesHelper(15);
+    this.scene.add(axesHelper);
+
+    const cube = this.createCube();
+    this.scene.add(cube);
     
     // Add sky
     this.sky = this.createSky();
@@ -52,9 +54,9 @@ class Game {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
-    const camera = new PerspectiveCamera(45, aspectRatio, 0.1, 1000);
-    camera.position.set(-30, 40, 35);
-    camera.lookAt(this.scene.position);
+    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    camera.position.set(0, 200, 100);
+    // camera.lookAt(this.scene.position);
     return camera;
   }
 
@@ -72,20 +74,18 @@ class Game {
     return renderer;
   }
 
-  // createCube() {
-  //   const cubeGeometry = new BoxGeometry(6, 6, 6);
-  //   const cubeMaterial = new MeshNormalMaterial();
-  //   const cube = new Mesh(cubeGeometry, cubeMaterial);
-  //   cube.position.set(-4, 3, 0);
-  //   return cube;
-  // }
+  createCube() {
+    const cubeGeometry = new BoxGeometry(6, 6, 6);
+    const cubeMaterial = new MeshNormalMaterial();
+    const cube = new Mesh(cubeGeometry, cubeMaterial);
+    cube.position.set(-4, 3, 0);
+    return cube;
+  }
 
   // Tạo Sky
   createSky() {
     const sky = new Sky();
-    // sky.mesh.position.x = 0;
-    sky.mesh.position.y = 0;
-    // sky.mesh.position.z = 0;
+    sky.setPosition(0, -600, 0);
     return sky.mesh;
   }
 
