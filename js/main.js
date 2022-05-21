@@ -85,7 +85,7 @@ class Game {
   // Tạo Sky
   createSky() {
     const sky = new Sky();
-    sky.setPosition(0, -600, 0);
+    sky.setPosition(0, -1200, 0);
     return sky.mesh;
   }
 
