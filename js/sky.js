@@ -61,9 +61,9 @@ export class Cloud {
   
 // Class Sky
 export class Sky {
-  constructor(){
+  constructor(nClouds){
     this.mesh = new Group();
-    this.nClouds = 40; // Số lượng mây
+    this.nClouds = nClouds; // Số lượng mây
 
     // Rải các đám mây trên trời theo góc bằng nhau
     this.stepAngle = Math.PI * 2 / this.nClouds; 
@@ -74,7 +74,7 @@ export class Sky {
     for(let i = 0; i < nClouds; i++){
       let cloud = new Cloud();
       let a = this.stepAngle * i;
-      let h = 1500 + Math.random() * 200; // Khoảng cách từ tâm tới đám mây
+      let h = 1600 + Math.random() * 100; // Khoảng cách từ tâm tới đám mây
       // Vị trí đám mây
       cloud.setPosition(Math.cos(a) * h, Math.sin(a) * h + 100, - 400 - Math.random() * 400)
 
@@ -91,6 +91,10 @@ export class Sky {
     this.mesh.position.x = x;
     this.mesh.position.y = y;
     this.mesh.position.z = z;
+  }
+
+  updateRotationZ(){
+    this.mesh.rotation.z += 0.001 ;
   }
 }
 

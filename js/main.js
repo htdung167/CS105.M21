@@ -10,7 +10,8 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
-  Object3D
+  Object3D,
+  // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
 var Colors = {
@@ -29,37 +30,39 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    const axesHelper = new AxesHelper(15);
-    this.scene.add(axesHelper);
 
+    //Add Cube
     const cube = this.createCube();
     this.scene.add(cube);
-    
     // Add sky
-    this.sky = this.createSky();
-    this.scene.add(this.sky);
-    console.log(3);
-
-
-
+    this.sky = this.createSky(200);
+    this.scene.add(this.sky.mesh);
+    // Resize
     this.handleResize();
+    //Render
     this.render();
+    // loop
+    // this.loop();
   }
+
+  // Create Scene
   createScene() {
     const scene = new Scene();
     // scene.background = new Color(0xffffff);
     return scene;
   }
+
+  // Create Camera
   createCamera(canvas) {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
     camera.position.set(0, 200, 100);
-    // camera.lookAt(this.scene.position);
     return camera;
   }
 
+  // Create Renderer
   createRenderer(canvas) {
     const renderer = new WebGLRenderer({
       canvas,
@@ -82,16 +85,35 @@ class Game {
     return cube;
   }
 
-  // Tạo Sky
-  createSky() {
-    const sky = new Sky();
+  // Create Sky
+  createSky(nClouds) {
+    const sky = new Sky(nClouds);
     sky.setPosition(0, -1200, 0);
-    return sky.mesh;
+    sky.mesh.tick = (ms) => {
+      sky.updateRotationZ();
+    }
+    return sky;
   }
 
-  render() {
-    this.renderer.render(this.scene, this.camera);
+
+
+  update(){
+    this.sky.mesh.tick();
   }
+
+  render(ms=0) {
+    this.update();
+    this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(this.render.bind(this));
+  }
+
+  // loop() {
+  //   this.sky.mesh.rotation.z += 1;
+    
+  //   this.render();
+  //   requestAnimationFrame(this.loop);
+  // }
+
   handleResize() {
     window.addEventListener("resize", () => {
       this.onResize();
@@ -109,7 +131,6 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
-//   update() {}
 }
 
 
