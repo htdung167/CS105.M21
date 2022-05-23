@@ -26,6 +26,7 @@ var Colors = {
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
+import { Ennemy } from "./ennemy.js";
 
 class Game {
   constructor(canvas) {
@@ -39,11 +40,16 @@ class Game {
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
+    // Add sea
     this.sea = this.createSea();
     this.scene.add(this.sea.mesh);
+    // Add light
     this.light = this.createLight();
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
+    // Add ennemy
+    this.ennemy = this.createEnnemy(100);
+    this.scene.add(this.ennemy.mesh);
     // Resize
     this.handleResize();
     //Render
@@ -83,7 +89,10 @@ class Game {
     renderer.setPixelRatio(window.devicePixelRatio);
     return renderer;
   }
-
+  createLight() {
+    const light = new Light();
+    return light;
+  }
   createCube() {
     const cubeGeometry = new BoxGeometry(6, 6, 6);
     const cubeMaterial = new MeshNormalMaterial();
@@ -111,13 +120,18 @@ class Game {
     };
     return sea;
   }
-  createLight() {
-    const light = new Light();
-    return light;
+  createEnnemy(nEnnemies) {
+    const ennemy = new Ennemy(nEnnemies);
+    ennemy.mesh.position.set(0, -1000, 0);
+    ennemy.mesh.tick = (ms) => {
+      ennemy.mesh.rotation.z += 0.001;
+  };
+    return ennemy;
   }
   update() {
     this.sky.mesh.tick();
     this.sea.mesh.tick();
+    this.ennemy.mesh.tick();
   }
 
   render(ms = 0) {
