@@ -25,6 +25,7 @@ var Colors = {
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
+import {ChainCoin} from "./coin.js";
 
 class Game {
   constructor(canvas) {
@@ -38,15 +39,23 @@ class Game {
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
+
+    // Add sea
     this.sea = this.createSea();
     this.scene.add(this.sea.mesh);
+
+    //Add light
     this.light = this.createLight();
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
+
+    // Add coin test
+    this.chaincoins = this.createCoin();
+    this.scene.add(this.chaincoins.mesh);
     // Resize
     this.handleResize();
     //Render
-    this.render();
+    this.render(1);
     // loop
     // this.loop();
   }
@@ -98,7 +107,7 @@ class Game {
     const sky = new Sky(nClouds);
     sky.setPosition(0, -1100, -100);
     sky.mesh.tick = (ms) => {
-      sky.updateRotationZ();
+      sky.updateRotationZ(ms);
     };
     return sky;
   }
@@ -108,7 +117,7 @@ class Game {
     sea.mesh.position.y = -550;
 
     sea.mesh.tick = (ms) => {
-      sea.mesh.rotation.z += 0.001;
+      sea.mesh.rotation.z += 0.001 ;
     };
     return sea;
   }
@@ -116,13 +125,25 @@ class Game {
     const light = new Light();
     return light;
   }
-  update() {
-    this.sky.mesh.tick();
-    this.sea.mesh.tick();
+
+  createCoin(){
+    const coins = new ChainCoin();
+    coins.mesh.position.y = -1100;
+    console.log(coins.coinsPool)
+    coins.mesh.tick = (ms) => {
+      coins.mesh.rotation.z += 0.001;
+      coins.updateRotationZForACoin();
+    }
+    return coins;
+  }
+  update(ms) {
+    this.sky.mesh.tick(ms);
+    this.sea.mesh.tick(ms);
+    this.chaincoins.mesh.tick(ms);
   }
 
-  render(ms = 0) {
-    this.update();
+  render(ms = 10000) {
+    this.update(ms);
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render.bind(this));
   }
