@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 100);
+    camera.position.set(0, 200, 1000);
     // camera.position.set(0, 0, 100);
 
     return camera;
