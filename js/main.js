@@ -23,19 +23,23 @@ var Colors = {
 }
 
 import {Sky} from './sky.js'
+import {Sea} from './sea.js '
 
 class Game {
   constructor(canvas) {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    // const axesHelper = new AxesHelper(15);
+    const axesHelper = new AxesHelper(15);
+    this.scene.add(axesHelper)
     // const cube = this.createCube();
     // this.scene.add(cube);
     
     // Add sky
-    this.sky = this.createSky();
-    this.scene.add(this.sky);
+    // this.sky = this.createSky();
+    // this.scene.add(this.sky);
+    this.sea = this.createSea()
+    this.scene.add(this.sea)
     console.log(3);
 
 
@@ -52,9 +56,9 @@ class Game {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
-    const camera = new PerspectiveCamera(45, aspectRatio, 0.1, 1000);
-    camera.position.set(-30, 40, 35);
-    camera.lookAt(this.scene.position);
+    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    camera.position.set(0, 200, 100);
+    // camera.lookAt(this.scene.position);
     return camera;
   }
 
@@ -83,10 +87,20 @@ class Game {
   // Tạo Sky
   createSky() {
     const sky = new Sky();
-    // sky.mesh.position.x = 0;
-    sky.mesh.position.y = 0;
-    // sky.mesh.position.z = 0;
+    // set sky.mesh in center of scene
+    sky.mesh.position.y = -600;
+    // return sky;
+    
     return sky.mesh;
+    // sky.mesh.position.x = 0;
+    // sky.mesh.position.y = -100;
+    // sky.mesh.position.z = 0;
+    // return sky.mesh;
+  }
+  createSea() {
+    const sea = new Sea();
+    sea.mesh.position.y = -600
+    return sea;
   }
 
   render() {

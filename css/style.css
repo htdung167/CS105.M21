@@ -4,6 +4,7 @@ body{
 }
 #webglOutput {
     background-color: #ccc;
-    width: 70%;
-    height: 70%;
+    /* get width of body */
+    width: 100vw;
+    height: 100vh;
 }

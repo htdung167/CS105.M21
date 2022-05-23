@@ -20,7 +20,7 @@ export class Cloud {
       this.mesh = new Group();
   
       // Tạo cloud geometry
-      this.cloudGeometry = new BoxBufferGeometry(20, 20, 20);
+      this.cloudGeometry = new BoxBufferGeometry(10, 10, 10);
   
       // Tạo cloud material
       // this.cloudMaterial = new MeshPhongMaterial({color : Colors.white});
@@ -37,7 +37,7 @@ export class Cloud {
       for(let i = 0; i < nBlocs; i++){
         let m = new Mesh(cloudGeometry, cloudMaterial);
         //Set vị trí và xoay cho mỗi cube
-        m.position.x = i * 15;
+        m.position.x = i * 20;
         m.position.y = Math.random() * 10;
         m.position.z = Math.random() * 10;
         m.rotation.z = Math.random() * Math.PI * 2;
