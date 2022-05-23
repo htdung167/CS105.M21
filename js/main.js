@@ -15,16 +15,16 @@ import {
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
 var Colors = {
-  red:0xf25346,
-  white:0xd8d0d1,
-  pink:0xF5986E,
-  brown:0x59332e,
-  brownDark:0x23190f,
-  blue:0x68c3c0,
-}
+  red: 0xf25346,
+  white: 0xd8d0d1,
+  pink: 0xf5986e,
+  brown: 0x59332e,
+  brownDark: 0x23190f,
+  blue: 0x68c3c0,
+};
 
-import {Sky} from './sky.js'
-import {Sea} from './sea.js '
+import { Sky } from "./sky.js";
+import { Sea } from "./sea.js ";
 
 class Game {
   constructor(canvas) {
@@ -38,6 +38,8 @@ class Game {
     // Add sky
     this.sky = this.createSky(200);
     this.scene.add(this.sky.mesh);
+    this.sea = this.createSea();
+    this.scene.add(this.sea.mesh);
     // Resize
     this.handleResize();
     //Render
@@ -67,14 +69,14 @@ class Game {
   createRenderer(canvas) {
     const renderer = new WebGLRenderer({
       canvas,
-      antialias: true
+      antialias: true,
     });
     renderer.setClearColor(0xffffff);
     const pixelRatio = window.devicePixelRatio;
     const width = canvas.clientWidth * pixelRatio;
     const height = canvas.clientHeight * pixelRatio;
     renderer.setSize(width, height, false);
-    // renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio);
     return renderer;
   }
 
@@ -92,22 +94,26 @@ class Game {
     sky.setPosition(0, -1200, 0);
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ();
-    }
+    };
     return sky;
   }
 
-    createSea() {
+  createSea() {
     const sea = new Sea();
-    sea.mesh.position.y = -600
+    sea.mesh.position.y = -450;
+
+    sea.mesh.tick = (ms) => {
+      sea.mesh.rotation.z += 0.001;
+    };
     return sea;
-
-
-
-  update(){
-    this.sky.mesh.tick();
   }
 
-  render(ms=0) {
+  update() {
+    this.sky.mesh.tick();
+    this.sea.mesh.tick();
+  }
+
+  render(ms = 0) {
     this.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render.bind(this));
@@ -115,7 +121,7 @@ class Game {
 
   // loop() {
   //   this.sky.mesh.rotation.z += 1;
-    
+
   //   this.render();
   //   requestAnimationFrame(this.loop);
   // }
@@ -139,10 +145,6 @@ class Game {
   }
 }
 
-
-}
-
-window.addEventListener('load', () => { 
-    new Game(document.querySelector('#webglOutput'));
+window.addEventListener("load", () => {
+  new Game(document.querySelector("#webglOutput"));
 });
-

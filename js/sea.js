@@ -26,23 +26,9 @@ var Colors = {
 export class Sea {
   constructor() {
     // this.mesh = new Group();
-    this.geom = new CylinderGeometry(1600, 600, 800, 40, 10);
+    this.geom = new CylinderGeometry(550, 550, 800, 40, 10);
     this.geom.applyMatrix4(new Matrix4().makeRotationX(-Math.PI / 2));
-    this.mat = new MeshPhongMaterial({
-      color: Colors.blue,
-      transparent: true,
-      opacity: 0.6,
-      Flatshading: FlatShading,
-    });
-    this.mesh = new Mesh(this.geom,this.mat)
-
-    
-    // const m = new Mesh(geom, mat);
-    //this.sea = this.createSea(this.geom,this.mat)
-    //this.mesh.receiveShadow = true;
-  };
-  // createSea(geom,mat){
-  //   const sea = new Mesh(geom,mat)
-  //   this.mesh.add(m)
-  // }
+    this.mat = new MeshNormalMaterial();
+    this.mesh = new Mesh(this.geom, this.mat);
+  }
 }
