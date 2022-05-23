@@ -18,17 +18,13 @@ export class Cloud {
     constructor(){
       // Tạo Group rỗng
       this.mesh = new Group();
-  
       // Tạo cloud geometry
-      this.cloudGeometry = new BoxBufferGeometry(10, 10, 10);
-  
+      this.cloudGeometry = new BoxBufferGeometry(20, 20, 20);
       // Tạo cloud material
       // this.cloudMaterial = new MeshPhongMaterial({color : Colors.white});
       this.cloudMaterial = new MeshNormalMaterial();
-  
       // Số cube trong 1 đám mây
       this.nBlocs = 3 + Math.floor(Math.random() * 3); //3 -> 5 đám mây
-  
       this.createCloud(this.cloudGeometry, this.cloudMaterial, this.nBlocs);
     }
   
@@ -48,21 +44,26 @@ export class Cloud {
         m.scale.set(s, s, s);
   
         // Đổ bóng
-        // m.castShadow = true;
-        // m.receiveShadow = true;
+        m.castShadow = true;
+        m.receiveShadow = true;
   
         // Thêm cube vào group
         this.mesh.add(m);
       }
     }
-  
+
+    setPosition(x, y, z){
+      this.mesh.position.x = x;
+      this.mesh.position.y = y;
+      this.mesh.position.z = z;
+    }
   }
   
 // Class Sky
 export class Sky {
-  constructor(){
+  constructor(nClouds){
     this.mesh = new Group();
-    this.nClouds = 30; // Số lượng mây
+    this.nClouds = nClouds; // Số lượng mây
 
     // Rải các đám mây trên trời theo góc bằng nhau
     this.stepAngle = Math.PI * 2 / this.nClouds; 
@@ -72,22 +73,28 @@ export class Sky {
   createClouds(nClouds){
     for(let i = 0; i < nClouds; i++){
       let cloud = new Cloud();
-      
       let a = this.stepAngle * i;
-      let h = 700 + Math.random() * 200; // Khoảng cách từ tâm tới đám mây
-
+      let h = 1600 + Math.random() * 100; // Khoảng cách từ tâm tới đám mây
       // Vị trí đám mây
-      cloud.mesh.position.x = Math.cos(a) * h;
-      cloud.mesh.position.y = Math.sin(a) * h;
+      cloud.setPosition(Math.cos(a) * h, Math.sin(a) * h + 100, - 400 - Math.random() * 400)
 
-      // Xoay đám mây theo trục z của nớ
+      // Xoay đám mây hướng vào trục z
       cloud.mesh.rotation.z = a + Math.PI / 2;  
-
       // Set độ sâu của đám mây
-      let s = 1 + Math.random() * 2;
+      let s = 0.5 + Math.random() * 2;
       cloud.mesh.scale.set(s, s, s);
       this.mesh.add(cloud.mesh);
     }
+  }
+
+  setPosition(x, y, z){
+    this.mesh.position.x = x;
+    this.mesh.position.y = y;
+    this.mesh.position.z = z;
+  }
+
+  updateRotationZ(){
+    this.mesh.rotation.z += 0.001 ;
   }
 }
 

@@ -10,7 +10,8 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
-  Object3D
+  Object3D,
+  // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
 var Colors = {
@@ -30,38 +31,39 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    const axesHelper = new AxesHelper(15);
-    this.scene.add(axesHelper)
-    // const cube = this.createCube();
-    // this.scene.add(cube);
-    
+
+    //Add Cube
+    const cube = this.createCube();
+    this.scene.add(cube);
     // Add sky
-    // this.sky = this.createSky();
-    // this.scene.add(this.sky);
-    this.sea = this.createSea()
-    this.scene.add(this.sea)
-    console.log(3);
-
-
-
+    this.sky = this.createSky(200);
+    this.scene.add(this.sky.mesh);
+    // Resize
     this.handleResize();
+    //Render
     this.render();
+    // loop
+    // this.loop();
   }
+
+  // Create Scene
   createScene() {
     const scene = new Scene();
     // scene.background = new Color(0xffffff);
     return scene;
   }
+
+  // Create Camera
   createCamera(canvas) {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
     camera.position.set(0, 200, 100);
-    // camera.lookAt(this.scene.position);
     return camera;
   }
 
+  // Create Renderer
   createRenderer(canvas) {
     const renderer = new WebGLRenderer({
       canvas,
@@ -76,36 +78,48 @@ class Game {
     return renderer;
   }
 
-  // createCube() {
-  //   const cubeGeometry = new BoxGeometry(6, 6, 6);
-  //   const cubeMaterial = new MeshNormalMaterial();
-  //   const cube = new Mesh(cubeGeometry, cubeMaterial);
-  //   cube.position.set(-4, 3, 0);
-  //   return cube;
-  // }
-
-  // Tạo Sky
-  createSky() {
-    const sky = new Sky();
-    // set sky.mesh in center of scene
-    sky.mesh.position.y = -600;
-    // return sky;
-    
-    return sky.mesh;
-    // sky.mesh.position.x = 0;
-    // sky.mesh.position.y = -100;
-    // sky.mesh.position.z = 0;
-    // return sky.mesh;
+  createCube() {
+    const cubeGeometry = new BoxGeometry(6, 6, 6);
+    const cubeMaterial = new MeshNormalMaterial();
+    const cube = new Mesh(cubeGeometry, cubeMaterial);
+    cube.position.set(-4, 3, 0);
+    return cube;
   }
-  createSea() {
+
+  // Create Sky
+  createSky(nClouds) {
+    const sky = new Sky(nClouds);
+    sky.setPosition(0, -1200, 0);
+    sky.mesh.tick = (ms) => {
+      sky.updateRotationZ();
+    }
+    return sky;
+  }
+
+    createSea() {
     const sea = new Sea();
     sea.mesh.position.y = -600
     return sea;
+
+
+
+  update(){
+    this.sky.mesh.tick();
   }
 
-  render() {
+  render(ms=0) {
+    this.update();
     this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(this.render.bind(this));
   }
+
+  // loop() {
+  //   this.sky.mesh.rotation.z += 1;
+    
+  //   this.render();
+  //   requestAnimationFrame(this.loop);
+  // }
+
   handleResize() {
     window.addEventListener("resize", () => {
       this.onResize();
@@ -123,11 +137,10 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
-//   update() {}
 }
 
 
-
+}
 
 window.addEventListener('load', () => { 
     new Game(document.querySelector('#webglOutput'));
