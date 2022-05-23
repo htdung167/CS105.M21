@@ -37,13 +37,13 @@ class Game {
     const cube = this.createCube();
     this.scene.add(cube);
     // Add sky
-    this.sky = this.createSky(200);
+    this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
     this.sea = this.createSea();
     this.scene.add(this.sea.mesh);
     this.light = this.createLight();
-    this.scene.add(this.light.hemisphereLight)
-    this.scene.add(this.light.shadowLight)
+    this.scene.add(this.light.hemisphereLight);
+    this.scene.add(this.light.shadowLight);
     // Resize
     this.handleResize();
     //Render
@@ -55,7 +55,7 @@ class Game {
   // Create Scene
   createScene() {
     const scene = new Scene();
-    // scene.background = new Color(0xffffff);
+    scene.background = new Color(0xffcc99);
     return scene;
   }
 
@@ -64,7 +64,7 @@ class Game {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
-    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
     camera.position.set(0, 200, 100);
     return camera;
   }
@@ -104,16 +104,16 @@ class Game {
 
   createSea() {
     const sea = new Sea();
-    sea.mesh.position.y = -450;
+    sea.mesh.position.y = -550;
 
     sea.mesh.tick = (ms) => {
       sea.mesh.rotation.z += 0.001;
     };
     return sea;
   }
-  createLight(){
-    const light = new Light()
-    return light
+  createLight() {
+    const light = new Light();
+    return light;
   }
   update() {
     this.sky.mesh.tick();
