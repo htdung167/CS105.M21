@@ -10,18 +10,9 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
-  Object3D,
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
-var Colors = {
-  red:0xf25346,
-  white:0xd8d0d1,
-  pink:0xF5986E,
-  brown:0x59332e,
-  brownDark:0x23190f,
-  blue:0x68c3c0,
-}
 
 import {Sky} from './sky.js'
 
@@ -57,8 +48,10 @@ class Game {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
-    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
     camera.position.set(0, 200, 100);
+    // camera.position.set(0, 0, 100);
+
     return camera;
   }
 
@@ -88,7 +81,7 @@ class Game {
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1200, 0);
+    sky.setPosition(0, -1100, -100);
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ();
     }

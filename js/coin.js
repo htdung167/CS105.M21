@@ -17,16 +17,19 @@ class CoinChain {
     constructor(){
         this.mesh = new Group();
         this.nCoins = 1 + Math.floor(Math.random() * 10);
+        this.createChainCoin(this.nCoins);
+        this.coinsPool = [];
+        this.coinsInUse = [];
     }
     createChainCoin(nCoins){
         let coinsPool = []
         for(let i = 0; i < nCoins; i++){
             let coin = new Coin();
-            coinsPool.push(coin);
+            this.coinsPool.push(coin);
         }
-        let heightSea = 300;
-        let heightMaxFly= 300;
-        let hCoins = heightSea + Math.floor(Math.random() * (heightMaxFly - heightSea - 100));
+        let heightSea = 1100;
+        let heightMaxFly= 1600;
+        let hCoins = heightSea + 100 + Math.floor(Math.random() * (heightMaxFly - heightSea - 100));
         let amplitude = 10 + Math.round(Math.random() * 10);
 
     }
@@ -38,6 +41,8 @@ class Coin {
         this.pointGeometry = new TorusGeometry(2, 1, 10, 16);
         this.pointMaterial = new MeshNormalMaterial();
         this.createPoint(this.pointGeometry, this.pointMaterial);
+        this.angle = 0;
+        this.dist = 0;
     }
     createPoint(pointGeometry, pointMaterial){
         this.mesh = new Mesh(pointGeometry, pointMaterial);
