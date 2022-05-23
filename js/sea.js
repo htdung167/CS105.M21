@@ -26,14 +26,13 @@ var Colors = {
 export class Sea {
   constructor() {
     // this.mesh = new Group();
-    this.geom = new CylinderGeometry(500, 500, 800, 40, 10);
-    this.geom.applyMatrix4(new Matrix4().makeRotationX(-Math.PI / 2));
+    this.geom = new CylinderGeometry(750, 650, 600, 40, 10);
+    this.geom.applyMatrix4(new Matrix4().makeRotationX(-Math.PI/2));
     this.mat = new MeshPhongMaterial({
       color: Colors.blue,
-      transparent:true,
-      opacity:.6,
-      flatShading:true,
-  
+      transparent: true,
+      opacity: 0.6,
+      flatShading: true,
     });
     this.mesh = new Mesh(this.geom, this.mat);
   }
