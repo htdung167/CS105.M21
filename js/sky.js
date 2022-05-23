@@ -12,7 +12,14 @@ import {
   Group,
   Object3D
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
-
+var Colors = {
+  red: 0xf25346,
+  white: 0xd8d0d1,
+  pink: 0xf5986e,
+  brown: 0x59332e,
+  brownDark: 0x23190f,
+  blue: 0x68c3c0,
+};
 // Class Cloud
 export class Cloud {
     constructor(){
@@ -22,7 +29,11 @@ export class Cloud {
       this.cloudGeometry = new BoxBufferGeometry(20, 20, 20);
       // Tạo cloud material
       // this.cloudMaterial = new MeshPhongMaterial({color : Colors.white});
-      this.cloudMaterial = new MeshNormalMaterial();
+      this.cloudMaterial = new MeshPhongMaterial({
+        color: Colors.white,
+        opacity: 0.9
+          
+      });
       // Số cube trong 1 đám mây
       this.nBlocs = 3 + Math.floor(Math.random() * 3); //3 -> 5 đám mây
       this.createCloud(this.cloudGeometry, this.cloudMaterial, this.nBlocs);

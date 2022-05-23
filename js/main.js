@@ -24,6 +24,7 @@ var Colors = {
 
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
+import { Light } from "./light.js";
 
 class Game {
   constructor(canvas) {
@@ -39,6 +40,9 @@ class Game {
     this.scene.add(this.sky.mesh);
     this.sea = this.createSea();
     this.scene.add(this.sea.mesh);
+    this.light = this.createLight();
+    this.scene.add(this.light.hemisphereLight)
+    this.scene.add(this.light.shadowLight)
     // Resize
     this.handleResize();
     //Render
@@ -108,7 +112,10 @@ class Game {
     };
     return sea;
   }
-
+  createLight(){
+    const light = new Light()
+    return light
+  }
   update() {
     this.sky.mesh.tick();
     this.sea.mesh.tick();
