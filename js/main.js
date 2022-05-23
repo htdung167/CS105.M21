@@ -10,7 +10,6 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
-  Object3D,
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
@@ -27,6 +26,7 @@ import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
 import { Ennemy } from "./ennemy.js";
+import {ChainCoin} from "./coin.js";
 
 class Game {
   constructor(canvas) {
@@ -50,10 +50,13 @@ class Game {
     // Add ennemy
     this.ennemy = this.createEnnemy(100);
     this.scene.add(this.ennemy.mesh);
+    // Add coin test
+    this.chaincoins = this.createCoin();
+    this.scene.add(this.chaincoins.mesh);
     // Resize
     this.handleResize();
     //Render
-    this.render();
+    this.render(1);
     // loop
     // this.loop();
   }
@@ -72,6 +75,8 @@ class Game {
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
     camera.position.set(0, 200, 100);
+    // camera.position.set(0, 0, 100);
+
     return camera;
   }
 
@@ -104,9 +109,9 @@ class Game {
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1200, 0);
+    sky.setPosition(0, -1100, -100);
     sky.mesh.tick = (ms) => {
-      sky.updateRotationZ();
+      sky.updateRotationZ(ms);
     };
     return sky;
   }
@@ -116,7 +121,7 @@ class Game {
     sea.mesh.position.y = -550;
 
     sea.mesh.tick = (ms) => {
-      sea.mesh.rotation.z += 0.001;
+      sea.mesh.rotation.z += 0.001 ;
     };
     return sea;
   }
@@ -128,14 +133,27 @@ class Game {
   };
     return ennemy;
   }
-  update() {
-    this.sky.mesh.tick();
-    this.sea.mesh.tick();
+
+  createCoin(){
+    const coins = new ChainCoin();
+    coins.mesh.position.y = -1100;
+    console.log(coins.coinsPool)
+    coins.mesh.tick = (ms) => {
+      coins.mesh.rotation.z += 0.001;
+      coins.updateRotationZForACoin();
+    }
+    return coins;
+  }
+  update(ms) {
+    this.sky.mesh.tick(ms);
+    this.sea.mesh.tick(ms);
     this.ennemy.mesh.tick();
+    this.chaincoins.mesh.tick(ms);
+
   }
 
-  render(ms = 0) {
-    this.update();
+  render(ms = 10000) {
+    this.update(ms);
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render.bind(this));
   }
