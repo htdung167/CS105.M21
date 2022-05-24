@@ -48,6 +48,8 @@ export class ChainCoin {
             coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
             // coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
+            coin.castShadow = true;
+            coin.receiveShadow = true;
 
         }
     }
