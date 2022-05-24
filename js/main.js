@@ -129,10 +129,18 @@ class Game {
   createCoin(){
     const coins = new ChainCoin();
     coins.mesh.position.y = -1100;
-    console.log(coins.coinsPool)
+    coins.mesh.position.z = -70;
+    // console.log(coins.coinsPool)
+    let lstCoin = coins.mesh.children;
+    console.log(lstCoin);
     coins.mesh.tick = (ms) => {
-      coins.mesh.rotation.z += 0.001;
-      coins.updateRotationZForACoin();
+      // coins.mesh.rotation.z += 0.001;
+      let lstCoin = coins.mesh.children;
+      for(let i = 0; i < lstCoin.length; i++)
+      {
+        lstCoin[i].rotation.z += 0.01;
+      }
+      // coins.updateRotationZForACoin();
     }
     return coins;
   }

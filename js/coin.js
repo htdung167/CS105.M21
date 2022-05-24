@@ -31,7 +31,7 @@ export class ChainCoin {
         }
         let heightSea = 1200;
         // let heightMaxFly= 1600;
-        let hCoins = heightSea + 70  + 50 * Math.random(); // 1200 - 1300
+        let hCoins = heightSea + 100  + 50 * Math.random(); // 1200 - 1300
         // let hCoins = 1320;
         // console.log(hCoins);
         let amplitude = 10 + Math.round(Math.random() * 10);
@@ -49,6 +49,10 @@ export class ChainCoin {
             // coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
 
+            coin.mesh.tick = () => {
+                coin.mesh.rotation.z += 0.01;
+            }
+
         }
     }
     updateRotationZForACoin(){
@@ -56,6 +60,7 @@ export class ChainCoin {
             this.coinsPool[i].updateRotationZ();
           }
     }
+    
 }
 
 class Coin {
@@ -79,4 +84,9 @@ class Coin {
     updateRotationZ(){
         this.mesh.rotation.z += 0.01;
     }
+    // tick(ms){
+    //     this.mesh.tick(ms) = () => {
+    //         this.mesh.rotation.z += 0.01;
+    //     }
+    // }
 }
