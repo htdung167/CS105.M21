@@ -35,8 +35,8 @@ class Game {
     this.renderer = this.createRenderer(canvas);
 
     //Add Cube
-    const cube = this.createCube();
-    this.scene.add(cube);
+    // const cube = this.createCube();
+    // this.scene.add(cube);
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
@@ -127,7 +127,7 @@ class Game {
   }
   createEnnemy(nEnnemies) {
     const ennemy = new Ennemy(nEnnemies);
-    ennemy.mesh.position.set(0, -1000, 0);
+    ennemy.mesh.position.set(0, -1100, 0);
     ennemy.mesh.tick = (ms) => {
       ennemy.mesh.rotation.z += 0.001;
   };

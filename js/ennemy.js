@@ -18,11 +18,16 @@ export class Stone{
         //create stones
           this.mesh = new Group();
           let m = new Mesh(geom, mat);
+          // m.position.x = 0;
+          // m.position.y = Math.random() * 10;
+          // m.position.z = Math.random() * 10;
+          // m.rotation.z = Math.random() * Math.PI * 2;
+          // m.rotation.y =  Math.random() * Math.PI * 2;
           m.position.x = 0;
-          m.position.y = Math.random() * 10;
-          m.position.z = Math.random() * 10;
-          m.rotation.z = Math.random() * Math.PI * 2;
-          m.rotation.y =  Math.random() * Math.PI * 2;
+          m.position.y = 0;
+          m.position.z = 0;
+          m.rotation.z = 0; 
+          m.rotation.y = 0;
           let s = 0.1 + Math.random() * 0.9;
           m.scale.set(s, s, s);
           m.castShadow = true;
@@ -48,12 +53,12 @@ export class Ennemy {
         for (let i = 0; i < nEnnemys; i++) {
           let stone = new Stone();
           let a = this.stepAngle * i;
-          let h = 1200 + Math.random() * 100; // Khoảng cách từ tâm tới đám mây
+          let h = 1200 + Math.random() *100; // Khoảng cách từ tâm tới đám mây
           // Vị trí đám mây
           stone.setPosition(
             Math.cos(a) * h,
-            Math.sin(a) * h + 100,
-            -400 - Math.random() * 400
+            Math.sin(a) * h + 200,
+            -70
           );
           let s = 0.5 + Math.random() * 2;
           stone.mesh.scale.set(s, s, s);
