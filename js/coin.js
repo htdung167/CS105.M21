@@ -49,16 +49,7 @@ export class ChainCoin {
             // coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
 
-            coin.mesh.tick = () => {
-                coin.mesh.rotation.z += 0.01;
-            }
-
         }
-    }
-    updateRotationZForACoin(){
-        for(let i=0; i < this.coinsPool.length; i++){
-            this.coinsPool[i].updateRotationZ();
-          }
     }
     
 }

@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 1000);
+    camera.position.set(0, 200, 100);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -146,9 +146,10 @@ class Game {
       let lstCoin = coins.mesh.children;
       for(let i = 0; i < lstCoin.length; i++)
       {
-        lstCoin[i].rotation.z += 0.01;
+        lstCoin[i].rotation.y += (0.1 + Math.random() * 2 / 10);
       }
       // coins.updateRotationZForACoin();
+      coins.mesh.rotation.z += 0.001;
     }
     return coins;
   }

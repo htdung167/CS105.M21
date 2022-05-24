@@ -54,6 +54,7 @@ export class Ennemy {
             Math.cos(a) * h,
             Math.sin(a) * h + 100,
             -400 - Math.random() * 400
+            // -70
           );
           let s = 0.5 + Math.random() * 2;
           stone.mesh.scale.set(s, s, s);
