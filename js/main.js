@@ -25,6 +25,7 @@ var Colors = {
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
+import { Ennemy } from "./ennemy.js";
 import {ChainCoin} from "./coin.js";
 
 class Game {
@@ -39,16 +40,16 @@ class Game {
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
-
     // Add sea
     this.sea = this.createSea();
     this.scene.add(this.sea.mesh);
-
-    //Add light
+    // Add light
     this.light = this.createLight();
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
-
+    // Add ennemy
+    this.ennemy = this.createEnnemy(100);
+    this.scene.add(this.ennemy.mesh);
     // Add coin test
     this.chaincoins = this.createCoin();
     this.scene.add(this.chaincoins.mesh);
@@ -73,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 100);
+    camera.position.set(0, 200, 1000);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -93,7 +94,10 @@ class Game {
     renderer.setPixelRatio(window.devicePixelRatio);
     return renderer;
   }
-
+  createLight() {
+    const light = new Light();
+    return light;
+  }
   createCube() {
     const cubeGeometry = new BoxGeometry(6, 6, 6);
     const cubeMaterial = new MeshNormalMaterial();
@@ -121,9 +125,13 @@ class Game {
     };
     return sea;
   }
-  createLight() {
-    const light = new Light();
-    return light;
+  createEnnemy(nEnnemies) {
+    const ennemy = new Ennemy(nEnnemies);
+    ennemy.mesh.position.set(0, -1000, 0);
+    ennemy.mesh.tick = (ms) => {
+      ennemy.mesh.rotation.z += 0.001;
+  };
+    return ennemy;
   }
 
   createCoin(){
@@ -147,7 +155,9 @@ class Game {
   update(ms) {
     this.sky.mesh.tick(ms);
     this.sea.mesh.tick(ms);
+    this.ennemy.mesh.tick();
     this.chaincoins.mesh.tick(ms);
+
   }
 
   render(ms = 10000) {
