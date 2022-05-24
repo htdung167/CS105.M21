@@ -26,7 +26,7 @@ import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
 import { Ennemy } from "./ennemy.js";
-import {ChainCoin} from "./coin.js";
+import { ChainCoin } from "./coin.js";
 
 class Game {
   constructor(canvas) {
@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 1000);
+    camera.position.set(0, 200, 2000);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -121,27 +121,35 @@ class Game {
     sea.mesh.position.y = -550;
 
     sea.mesh.tick = (ms) => {
-      sea.mesh.rotation.z += 0.001 ;
+      sea.mesh.rotation.z += 0.001;
     };
     return sea;
   }
   createEnnemy(nEnnemies) {
     const ennemy = new Ennemy(nEnnemies);
-    ennemy.mesh.position.set(0, -1100, 0);
+    ennemy.mesh.position.set(0, -1000, 0);
     ennemy.mesh.tick = (ms) => {
       ennemy.mesh.rotation.z += 0.001;
-  };
+    };
     return ennemy;
   }
 
-  createCoin(){
+  createCoin() {
     const coins = new ChainCoin();
     coins.mesh.position.y = -1100;
-    console.log(coins.coinsPool)
+    coins.mesh.position.z = -70;
+    // console.log(coins.coinsPool)
+    let lstCoin = coins.mesh.children;
+    console.log(lstCoin);
     coins.mesh.tick = (ms) => {
+      // coins.mesh.rotation.z += 0.001;
+      let lstCoin = coins.mesh.children;
+      for (let i = 0; i < lstCoin.length; i++) {
+        lstCoin[i].rotation.y += 0.1 + (Math.random() * 2) / 10;
+      }
+      // coins.updateRotationZForACoin();
       coins.mesh.rotation.z += 0.001;
-      coins.updateRotationZForACoin();
-    }
+    };
     return coins;
   }
   update(ms) {
@@ -149,7 +157,6 @@ class Game {
     this.sea.mesh.tick(ms);
     this.ennemy.mesh.tick();
     this.chaincoins.mesh.tick(ms);
-
   }
 
   render(ms = 10000) {
