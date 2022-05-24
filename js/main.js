@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 2000);
+    camera.position.set(0, 200, 100);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -127,7 +127,7 @@ class Game {
   }
   createEnnemy(nEnnemies) {
     const ennemy = new Ennemy(nEnnemies);
-    ennemy.mesh.position.set(0, -1000, 0);
+    ennemy.mesh.position.set(0, -1000,0);
     ennemy.mesh.tick = (ms) => {
       ennemy.mesh.rotation.z += 0.001;
     };
