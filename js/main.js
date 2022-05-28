@@ -111,7 +111,7 @@ class Game {
   createPlane() {
     const plane= new Plane();
     // pilot.updateHairs();
-    airplane.mesh.scale.set(0.25, 0.25, 0.25);
+    plane.mesh.scale.set(0.25, 0.25, 0.25);
     plane.mesh.position.y = 200
     return plane;
   }

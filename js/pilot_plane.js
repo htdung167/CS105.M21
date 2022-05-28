@@ -100,15 +100,15 @@ export class Plane {
       color: 0xcd5555,
       flatShading: true,
     });
-    
-    geomCabin.vertices[4].y -= 10;
-    geomCabin.vertices[4].z += 20;
-    geomCabin.vertices[5].y -= 10;
-    geomCabin.vertices[5].z -= 20;
-    geomCabin.vertices[6].y += 30;
-    geomCabin.vertices[6].z += 20;
-    geomCabin.vertices[7].y += 30;
-    geomCabin.vertices[7].z -= 20;
+    // console.log(geomCabin.vertices[x]);
+    // geomCabin.vertices[4].y -= 10;
+    // geomCabin.vertices[4].z += 20;
+    // geomCabin.vertices[5].y -= 10;
+    // geomCabin.vertices[5].z -= 20;
+    // geomCabin.vertices[6].y += 30;
+    // geomCabin.vertices[6].z += 20;
+    // geomCabin.vertices[7].y += 30;
+    // geomCabin.vertices[7].z -= 20;
 
     this.cabin = new Mesh(geomCabin, matCabin);
     this.cabin.castShadow = true;
@@ -170,14 +170,14 @@ export class Plane {
     this.mesh.add(this.windshield);
 
     var geomPropeller = new BoxGeometry(20, 10, 10, 1, 1, 1);
-    geomPropeller.vertices[4].y -= 5;
-    geomPropeller.vertices[4].z += 5;
-    geomPropeller.vertices[5].y -= 5;
-    geomPropeller.vertices[5].z -= 5;
-    geomPropeller.vertices[6].y += 5;
-    geomPropeller.vertices[6].z += 5;
-    geomPropeller.vertices[7].y += 5;
-    geomPropeller.vertices[7].z -= 5;
+    // geomPropeller.vertices[4].y -= 5;
+    // geomPropeller.vertices[4].z += 5;
+    // geomPropeller.vertices[5].y -= 5;
+    // geomPropeller.vertices[5].z -= 5;
+    // geomPropeller.vertices[6].y += 5;
+    // geomPropeller.vertices[6].z += 5;
+    // geomPropeller.vertices[7].y += 5;
+    // geomPropeller.vertices[7].z -= 5;
     var matPropeller = new MeshPhongMaterial({
       color: 0xa0522d,
       flatShading: true,
@@ -261,7 +261,8 @@ export class Plane {
     this.mesh.add(suspension);
 
     this.pilot = new Pilot();
-    this.pilot.mesh.position.set(-10, 27, 0);
+    this.pilot.mesh.position.set(0, 40, 0);
+    this.pilot.mesh.scale.set(1.25, 1.25, 1.25);
     this.mesh.add(this.pilot.mesh);
 
     this.mesh.castShadow = true;
