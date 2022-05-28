@@ -21,7 +21,7 @@ var Colors = {
   brownDark: 0x23190f,
   blue: 0x68c3c0,
 };
-
+import { Plane,Pilot } from "./pilot_plane.js";
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
@@ -37,6 +37,8 @@ class Game {
     //Add Cube
     // const cube = this.createCube();
     // this.scene.add(cube);
+    this.plane = this.createPlane();
+    this.scene.add(this.plane.mesh);
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
@@ -74,8 +76,8 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 300);
-    // camera.position.set(0, 0, 100);
+    camera.position.set(0, 200, 200);
+    // camera.position.set(0, 200, 200);
 
     return camera;
   }
@@ -105,7 +107,14 @@ class Game {
     cube.position.set(-4, 3, 0);
     return cube;
   }
-
+//Create Pilot
+  createPlane() {
+    const plane= new Plane();
+    // pilot.updateHairs();
+    airplane.mesh.scale.set(0.25, 0.25, 0.25);
+    plane.mesh.position.y = 200
+    return plane;
+  }
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
@@ -144,7 +153,6 @@ class Game {
     };
     return ennemiesHolder;
   }
-
   createCoin() {
     const coins = new ChainCoin();
     coins.mesh.position.y = -1100;

@@ -92,9 +92,11 @@ export class EnnemiesHolder {
   constructor(ennemiesPool, nEnnemies) {
     this.mesh = new Group();
     this.ennemiesInUse = [];
-    this.ennemiesPool = ennemiesPool
-    this.spawnEnnemies = function() {
-      for (let i = 0; i < nEnnemies; i++) {
+    this.ennemiesPool = ennemiesPool;
+    this.nEnnemies = nEnnemies;
+  }
+  spawnEnnemies() {
+    for (let i = 0; i < this.nEnnemies; i++) {
       var ennemy;
       if (this.ennemiesPool.length > 0) {
         ennemy = this.ennemiesPool.pop();
@@ -108,8 +110,6 @@ export class EnnemiesHolder {
       ennemy.mesh.position.z = -70;
       this.mesh.add(ennemy.mesh);
       this.ennemiesInUse.push(ennemy);
-      }
-    };
-
+    }
   }
 }
