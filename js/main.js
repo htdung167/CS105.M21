@@ -25,9 +25,9 @@ var Colors = {
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
-import { Ennemy } from "./ennemy.js";
+import { Ennemy,EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
-
+var ennemiesPool = [];
 class Game {
   constructor(canvas) {
     this.scene = this.createScene();
@@ -48,8 +48,8 @@ class Game {
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
     // Add ennemy
-    this.ennemy = this.createEnnemy(100);
-    this.scene.add(this.ennemy.mesh);
+    this.ennemiesHolder = this.createEnnemy();
+    this.scene.add(this.ennemiesHolder.mesh);
     // Add coin test
     this.chaincoins = this.createCoin();
     this.scene.add(this.chaincoins.mesh);
@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 100);
+    camera.position.set(0, 200, 300);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -125,13 +125,24 @@ class Game {
     };
     return sea;
   }
-  createEnnemy(nEnnemies) {
-    const ennemy = new Ennemy(nEnnemies);
-    ennemy.mesh.position.set(0, -1000,0);
-    ennemy.mesh.tick = (ms) => {
-      ennemy.mesh.rotation.z += 0.001;
+  
+  createEnnemy() {
+    for (var i = 0; i < 10; i++) {
+      const ennemy = new Ennemy();
+      ennemiesPool.push(ennemy);
+    }
+    var nEnnemies = 30; // game level
+    const ennemiesHolder = new EnnemiesHolder(ennemiesPool,nEnnemies);
+    ennemiesHolder.spawnEnnemies();
+    ennemiesHolder.mesh.position.y = -1000;
+      
+   
+    
+  
+    ennemiesHolder.mesh.tick = (ms) => {
+    ennemiesHolder.mesh.rotation.z += 0.001;
     };
-    return ennemy;
+    return ennemiesHolder;
   }
 
   createCoin() {
@@ -155,7 +166,7 @@ class Game {
   update(ms) {
     this.sky.mesh.tick(ms);
     this.sea.mesh.tick(ms);
-    this.ennemy.mesh.tick();
+    this.ennemiesHolder.mesh.tick();
     this.chaincoins.mesh.tick(ms);
   }
 
