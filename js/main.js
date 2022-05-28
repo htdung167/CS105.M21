@@ -109,7 +109,7 @@ class Game {
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1100, -100);
+    sky.setPosition(0, -1000, -100);
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ(ms);
     };
