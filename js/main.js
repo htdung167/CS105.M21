@@ -74,7 +74,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 100);
+    camera.position.set(0, 200, 1000);
     // camera.position.set(0, 0, 100);
 
     return camera;
@@ -113,6 +113,7 @@ class Game {
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ(ms);
     };
+    console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
     return sky;
   }
 
@@ -123,6 +124,7 @@ class Game {
     sea.mesh.tick = (ms) => {
       sea.mesh.rotation.z += 0.001;
     };
+    console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
   createEnnemy(nEnnemies) {
@@ -131,6 +133,7 @@ class Game {
     ennemy.mesh.tick = (ms) => {
       ennemy.mesh.rotation.z += 0.001;
     };
+    console.log("Ennemy", ennemy.mesh.position.x, ennemy.mesh.position.y);
     return ennemy;
   }
 
