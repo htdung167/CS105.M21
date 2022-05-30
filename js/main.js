@@ -161,16 +161,26 @@ class Game {
     coinsHolder.mesh.position.y = -1100;
     coinsHolder.mesh.position.z = -70;
     let i = 0;
+    let oldTime = 0;
+    let newTime = 0;
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins();
-      i++;
-      coinsHolder.spawnCoins();
-      // console.log(i);
+      newTime = new Date().getTime();
+      let deltaTime = newTime - oldTime;
+      oldTime = newTime;
+      // console.log(deltaTime);
+      // console.log(coinsHolder.coinsPool.length)
+      let rand = Math.floor(Math.random() * 200);
+      // console.log(rand);
 
-      // if(i % ms == 0){
-      //   coinsHolder.spawnCoins();
-      //   console.log(i)
-      // }
+      if(rand == 16 || rand == 7)
+      {
+        console.log("Pool:",coinsHolder.coinsPool.length)
+        console.log("InUse:", coinsHolder.coinsInUse.length)
+        coinsHolder.spawnCoins();
+      }
+
+      
       
     }
 

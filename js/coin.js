@@ -82,6 +82,7 @@ export class ChainCoin {
                 this.coinsPool.unshift(this.coinsInUse.splice(i, 1)[0]);
                 this.mesh.remove(coin.mesh);
                 i--;
+                // console.log(this.coinsPool.length)
                 // coin.angle -= Math.PI * 2;
                 // console.log("change angle coin")
                 // console.log(this.coinsInUse.length)
@@ -89,6 +90,7 @@ export class ChainCoin {
             coin.mesh.position.y = coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
             coin.mesh.rotation.y += 0.1 + (Math.random() * 2) / 10; 
+            
         }
     }
     
