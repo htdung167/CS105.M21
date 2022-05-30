@@ -21,13 +21,13 @@ var Colors = {
   brownDark: 0x23190f,
   blue: 0x68c3c0,
 };
-
+import { Plane,Pilot } from "./pilot_plane.js";
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
-import { Ennemy } from "./ennemy.js";
+import { Ennemy,EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
-
+var ennemiesPool = [];
 class Game {
   constructor(canvas) {
     this.scene = this.createScene();
@@ -37,6 +37,8 @@ class Game {
     //Add Cube
     // const cube = this.createCube();
     // this.scene.add(cube);
+    this.plane = this.createPlane();
+    this.scene.add(this.plane.mesh);
     // Add sky
     this.sky = this.createSky(50);
     this.scene.add(this.sky.mesh);
@@ -48,8 +50,8 @@ class Game {
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
     // Add ennemy
-    this.ennemy = this.createEnnemy(100);
-    this.scene.add(this.ennemy.mesh);
+    this.ennemiesHolder = this.createEnnemy();
+    this.scene.add(this.ennemiesHolder.mesh);
     // Add coin test
     this.chaincoins = this.createCoin();
     this.scene.add(this.chaincoins.mesh);
@@ -74,8 +76,8 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 1000);
-    // camera.position.set(0, 0, 100);
+    camera.position.set(0, 200, 200);
+    // camera.position.set(0, 200, 200);
 
     return camera;
   }
@@ -105,11 +107,18 @@ class Game {
     cube.position.set(-4, 3, 0);
     return cube;
   }
-
+//Create Pilot
+  createPlane() {
+    const plane= new Plane();
+    // pilot.updateHairs();
+    plane.mesh.scale.set(0.25, 0.25, 0.25);
+    plane.mesh.position.y = 200
+    return plane;
+  }
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1100, -100);
+    sky.setPosition(0, -1000, -100);
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ(ms);
     };
@@ -127,38 +136,56 @@ class Game {
     console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
-  createEnnemy(nEnnemies) {
-    const ennemy = new Ennemy(nEnnemies);
-    ennemy.mesh.position.set(0, -1000, 0);
-    ennemy.mesh.tick = (ms) => {
-      ennemy.mesh.rotation.z += 0.001;
+  
+  createEnnemy() {
+    for (var i = 0; i < 10; i++) {
+      const ennemy = new Ennemy();
+      ennemiesPool.push(ennemy);
+    }
+    var nEnnemies = 30; // game level
+    const ennemiesHolder = new EnnemiesHolder(ennemiesPool,nEnnemies);
+    ennemiesHolder.spawnEnnemies();
+    ennemiesHolder.mesh.position.y = -1000;
+      
+   
+    
+  
+    ennemiesHolder.mesh.tick = (ms) => {
+    ennemiesHolder.mesh.rotation.z += 0.001;
     };
-    console.log("Ennemy", ennemy.mesh.position.x, ennemy.mesh.position.y);
-    return ennemy;
+    return ennemiesHolder;
   }
 
   createCoin() {
-    const coins = new ChainCoin();
-    coins.mesh.position.y = -1100;
-    coins.mesh.position.z = -70;
-    // console.log(coins.coinsPool)
-    let lstCoin = coins.mesh.children;
-    console.log(lstCoin);
-    coins.mesh.tick = (ms) => {
-      // coins.mesh.rotation.z += 0.001;
-      let lstCoin = coins.mesh.children;
-      for (let i = 0; i < lstCoin.length; i++) {
-        lstCoin[i].rotation.y += 0.1 + (Math.random() * 2) / 10;
-      }
-      // coins.updateRotationZForACoin();
-      coins.mesh.rotation.z += 0.001;
-    };
-    return coins;
+    const coinsHolder = new ChainCoin(20);
+    coinsHolder.mesh.position.y = -1100;
+    coinsHolder.mesh.position.z = -70;
+    coinsHolder.mesh.tick = () => {
+      coinsHolder.rotationCoins();
+      coinsHolder.spawnCoins();
+    }
+
+    return coinsHolder;
+
+    // const coins = new ChainCoin();
+    // coins.mesh.position.y = -1100;
+    // coins.mesh.position.z = -70;
+    // // console.log(coins.coinsPool)
+    // let lstCoin = coins.mesh.children;
+    // console.log(lstCoin);
+    // coins.mesh.tick = (ms) => {
+    //   let lstCoin = coins.mesh.children;
+    //   for (let i = 0; i < lstCoin.length; i++) {
+    //     lstCoin[i].rotation.y += 0.1 + (Math.random() * 2) / 10;
+    //   }
+    //   coins.mesh.rotation.z += 0.001;
+    // };
+    // return coins;
   }
   update(ms) {
     this.sky.mesh.tick(ms);
     this.sea.mesh.tick(ms);
-    this.ennemy.mesh.tick();
+    this.ennemiesHolder.mesh.tick();
     this.chaincoins.mesh.tick(ms);
   }
 
