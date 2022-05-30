@@ -33,7 +33,7 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    
+    this.mousePos = { x: 0, y: 0 };
     //Add Cube
     // const cube = this.createCube();
     // this.scene.add(cube);
@@ -232,10 +232,10 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
-  loop(mousePos) {
-    this.plane.updatePlane(mousePos);
-    renderer.render(scene, camera);
-    requestAnimationFrame(loop);
+  loop() {
+    this.plane.updatePlane(this.mousePos);
+    // renderer.render(scene, camera);
+    requestAnimationFrame(this.loop);
   }
   handleMouseMove(event) {
     var tx = -1 + (event.clientX / canvas.clientWidth) * 2;
