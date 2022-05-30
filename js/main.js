@@ -53,7 +53,7 @@ class Game {
     this.ennemiesHolder = this.createEnnemy();
     this.scene.add(this.ennemiesHolder.mesh);
     // Add coin test
-    this.chaincoins = this.createCoin();
+    this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
     // Resize
     this.handleResize();
@@ -76,7 +76,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 200);
+    camera.position.set(0, 200, 100);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -160,9 +160,18 @@ class Game {
     const coinsHolder = new ChainCoin(20);
     coinsHolder.mesh.position.y = -1100;
     coinsHolder.mesh.position.z = -70;
-    coinsHolder.mesh.tick = () => {
+    let i = 0;
+    coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins();
+      i++;
       coinsHolder.spawnCoins();
+      // console.log(i);
+
+      // if(i % ms == 0){
+      //   coinsHolder.spawnCoins();
+      //   console.log(i)
+      // }
+      
     }
 
     return coinsHolder;
