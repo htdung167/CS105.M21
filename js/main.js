@@ -21,11 +21,11 @@ var Colors = {
   brownDark: 0x23190f,
   blue: 0x68c3c0,
 };
-import { Plane,Pilot } from "./pilot_plane.js";
+import { Plane, Pilot } from "./pilot_plane.js";
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
-import { Ennemy,EnnemiesHolder } from "./ennemy.js";
+import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
 var ennemiesPool = [];
 class Game {
@@ -33,7 +33,7 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-
+    
     //Add Cube
     // const cube = this.createCube();
     // this.scene.add(cube);
@@ -59,24 +59,25 @@ class Game {
     this.handleResize();
     //Render
     this.render(1);
+    
+    document.addEventListener("mousemove", this.handleMouseMove, false);
     // loop
-    // this.loop();
+    this.loop();
   }
-
+  
   // Create Scene
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
     return scene;
   }
-
   // Create Camera
   createCamera(canvas) {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 100);
+    camera.position.set(0, 200, 2000);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -107,12 +108,12 @@ class Game {
     cube.position.set(-4, 3, 0);
     return cube;
   }
-//Create Pilot
+  //Create Pilot
   createPlane() {
-    const plane= new Plane();
+    const plane = new Plane();
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
-    plane.mesh.position.y = 200
+    plane.mesh.position.y = 200;
     return plane;
   }
   // Create Sky
@@ -136,22 +137,19 @@ class Game {
     console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
-  
+
   createEnnemy() {
     for (var i = 0; i < 10; i++) {
       const ennemy = new Ennemy();
       ennemiesPool.push(ennemy);
     }
     var nEnnemies = 30; // game level
-    const ennemiesHolder = new EnnemiesHolder(ennemiesPool,nEnnemies);
+    const ennemiesHolder = new EnnemiesHolder(ennemiesPool, nEnnemies);
     ennemiesHolder.spawnEnnemies();
     ennemiesHolder.mesh.position.y = -1000;
-      
-   
-    
-  
+
     ennemiesHolder.mesh.tick = (ms) => {
-    ennemiesHolder.mesh.rotation.z += 0.001;
+      ennemiesHolder.mesh.rotation.z += 0.001;
     };
     return ennemiesHolder;
   }
@@ -173,16 +171,12 @@ class Game {
       let rand = Math.floor(Math.random() * 200);
       // console.log(rand);
 
-      if(rand == 16 || rand == 7)
-      {
-        console.log("Pool:",coinsHolder.coinsPool.length)
-        console.log("InUse:", coinsHolder.coinsInUse.length)
+      if (rand == 16 || rand == 7) {
+        console.log("Pool:", coinsHolder.coinsPool.length);
+        console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
-
-      
-      
-    }
+    };
 
     return coinsHolder;
 
@@ -238,8 +232,17 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
+  loop(mousePos) {
+    this.plane.updatePlane(mousePos);
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  }
+  handleMouseMove(event) {
+    var tx = -1 + (event.clientX / canvas.clientWidth) * 2;
+    var ty = 1 - (event.clientY / canvas.clientHeight) * 2;
+    mousePos = { x: tx, y: ty };
+  }
 }
-
 window.addEventListener("load", () => {
   new Game(document.querySelector("#webglOutput"));
 });

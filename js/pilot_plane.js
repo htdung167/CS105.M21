@@ -1,95 +1,94 @@
 import {
-    Group,
-    Mesh,
-    MeshPhongMaterial,
-    BoxGeometry,
-    MeshLambertMaterial,
-    Matrix4,
-    Object3D
-
+  Group,
+  Mesh,
+  MeshPhongMaterial,
+  BoxGeometry,
+  MeshLambertMaterial,
+  Matrix4,
+  Object3D,
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 export class Pilot {
-    constructor() {
-        this.mesh = new Group();
-        this.mesh.name = "pilot";
-        // this.angleHairs=0;
+  constructor() {
+    this.mesh = new Group();
+    this.mesh.name = "pilot";
+    // this.angleHairs=0;
 
-        var bodyGeom = new BoxGeometry(15, 15, 15);
-        var bodyMat = new MeshPhongMaterial({
-          color: 0xff8247,
-          flatShading: true,
-        });
-        this.body = new Mesh(bodyGeom, bodyMat);
-        this.body.position.set(2, -12, 0);
-        this.mesh.add(this.body);
+    var bodyGeom = new BoxGeometry(15, 15, 15);
+    var bodyMat = new MeshPhongMaterial({
+      color: 0xff8247,
+      flatShading: true,
+    });
+    this.body = new Mesh(bodyGeom, bodyMat);
+    this.body.position.set(2, -12, 0);
+    this.mesh.add(this.body);
 
-        var faceGeom = new BoxGeometry(10, 10, 10);
-        var faceMat = new MeshLambertMaterial({ color: 0xFFC1C1 });
-        this.face = new Mesh(faceGeom, faceMat);
-        this.mesh.add(this.face);
+    var faceGeom = new BoxGeometry(10, 10, 10);
+    var faceMat = new MeshLambertMaterial({ color: 0xffc1c1 });
+    this.face = new Mesh(faceGeom, faceMat);
+    this.mesh.add(this.face);
 
-        var hairGeom = new BoxGeometry(4, 4, 4);
-        var hairMat = new MeshLambertMaterial({ color: 0x000000 });
-        this.hair = new Mesh(hairGeom, hairMat);
-        this.hair.geometry.applyMatrix4(new Matrix4().makeTranslation(0, 2, 0));
-        this.hairs = new Group();
+    var hairGeom = new BoxGeometry(4, 4, 4);
+    var hairMat = new MeshLambertMaterial({ color: 0x000000 });
+    this.hair = new Mesh(hairGeom, hairMat);
+    this.hair.geometry.applyMatrix4(new Matrix4().makeTranslation(0, 2, 0));
+    this.hairs = new Group();
 
-        this.hairsTop = new Group();
+    this.hairsTop = new Group();
 
-        for (var i = 0; i < 12; i++) {
-          var h = this.hair.clone();
-          var col = i % 3;
-          var row = Math.floor(i / 3);
-          var startPosZ = -4;
-          var startPosX = -4;
-          h.position.set(startPosX + row * 4, 0, startPosZ + col * 4);
-          h.geometry.applyMatrix4(new Matrix4().makeScale(1, 1, 1));
-          this.hairsTop.add(h);
-        }
-        this.hairs.add(this.hairsTop);
-
-        var hairSideGeom = new BoxGeometry(12, 4, 2);
-        hairSideGeom.applyMatrix4(new Matrix4().makeTranslation(-6, 0, 0));
-        var hairSideR = new Mesh(hairSideGeom, hairMat);
-        var hairSideL = hairSideR.clone();
-        hairSideR.position.set(8, -2, 6);
-        hairSideL.position.set(8, -2, -6);
-        this.hairs.add(hairSideR);
-        this.hairs.add(hairSideL);
-
-        var hairBackGeom = new BoxGeometry(2, 8, 10);
-        var hairBack = new Mesh(hairBackGeom, hairMat);
-        hairBack.position.set(-1, -4, 0);
-        this.hairs.add(hairBack);
-        this.hairs.position.set(-5, 5, 0);
-
-        this.mesh.add(this.hairs);
-
-        var glassGeom = new BoxGeometry(5, 5, 5);
-        var glassMat = new MeshLambertMaterial({ color: 0x00dd00 });
-        this.glassR = new Mesh(glassGeom, glassMat);
-        this.glassR.position.set(6, 0, 3);
-        this.glassL = this.glassR.clone();
-        this.glassL.position.z = -this.glassR.position.z;
-
-        var glassAGeom = new BoxGeometry(11, 1, 11);
-        this.glassA = new Mesh(glassAGeom, glassMat);
-        this.mesh.add(this.glassR);
-        this.mesh.add(this.glassL);
-        this.mesh.add(this.glassA);
-
-        var earGeom = new BoxGeometry(2, 3, 2);
-        this.earL = new Mesh(earGeom, faceMat);
-        this.earL.position.set(0, 0, -6);
-        this.earR = this.earL.clone();
-        this.earR.position.set(0, 0, 6);
-        this.mesh.add(this.earL);
-        this.mesh.add(this.earR);
+    for (var i = 0; i < 12; i++) {
+      var h = this.hair.clone();
+      var col = i % 3;
+      var row = Math.floor(i / 3);
+      var startPosZ = -4;
+      var startPosX = -4;
+      h.position.set(startPosX + row * 4, 0, startPosZ + col * 4);
+      h.geometry.applyMatrix4(new Matrix4().makeScale(1, 1, 1));
+      this.hairsTop.add(h);
     }
-    
+    this.hairs.add(this.hairsTop);
+
+    var hairSideGeom = new BoxGeometry(12, 4, 2);
+    hairSideGeom.applyMatrix4(new Matrix4().makeTranslation(-6, 0, 0));
+    var hairSideR = new Mesh(hairSideGeom, hairMat);
+    var hairSideL = hairSideR.clone();
+    hairSideR.position.set(8, -2, 6);
+    hairSideL.position.set(8, -2, -6);
+    this.hairs.add(hairSideR);
+    this.hairs.add(hairSideL);
+
+    var hairBackGeom = new BoxGeometry(2, 8, 10);
+    var hairBack = new Mesh(hairBackGeom, hairMat);
+    hairBack.position.set(-1, -4, 0);
+    this.hairs.add(hairBack);
+    this.hairs.position.set(-5, 5, 0);
+
+    this.mesh.add(this.hairs);
+
+    var glassGeom = new BoxGeometry(5, 5, 5);
+    var glassMat = new MeshLambertMaterial({ color: 0x00dd00 });
+    this.glassR = new Mesh(glassGeom, glassMat);
+    this.glassR.position.set(6, 0, 3);
+    this.glassL = this.glassR.clone();
+    this.glassL.position.z = -this.glassR.position.z;
+
+    var glassAGeom = new BoxGeometry(11, 1, 11);
+    this.glassA = new Mesh(glassAGeom, glassMat);
+    this.mesh.add(this.glassR);
+    this.mesh.add(this.glassL);
+    this.mesh.add(this.glassA);
+
+    var earGeom = new BoxGeometry(2, 3, 2);
+    this.earL = new Mesh(earGeom, faceMat);
+    this.earL.position.set(0, 0, -6);
+    this.earR = this.earL.clone();
+    this.earR.position.set(0, 0, 6);
+    this.mesh.add(this.earL);
+    this.mesh.add(this.earR);
+  }
 }
+var mousePos = { x: 0, y: 0 };
 export class Plane {
-    constructor() {
+  constructor() {
     this.mesh = new Object3D();
     this.mesh.name = "plane";
 
@@ -253,7 +252,7 @@ export class Plane {
     suspensionGeom.applyMatrix4(new Matrix4().makeTranslation(0, 10, 0));
     var suspensionMat = new MeshPhongMaterial({
       color: 0xcd5555,
-     flatShading: true,
+      flatShading: true,
     });
     var suspension = new Mesh(suspensionGeom, suspensionMat);
     suspension.position.set(-35, -5, 0);
@@ -267,5 +266,21 @@ export class Plane {
 
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
-}
+  }
+  normalize(v, vmin, vmax, tmin, tmax) {
+    var nv = Math.max(Math.min(v, vmax), vmin);
+    var dv = vmax - vmin;
+    var pc = (nv - vmin) / dv;
+    var dt = tmax - tmin;
+    var tv = tmin + pc * dt;
+    return tv;
+  }
+
+  updatePlane(mousePos) {
+    var targetY = normalize(mousePos.y, -0.75, 0.75, 25, 175);
+    var targetX = normalize(mousePos.x, -0.75, 0.75, -100, 100);
+    this.mesh.position.y = targetY;
+    this.mesh.position.x = targetX;
+    this.propeller.rotation.x += 0.3;
+  }
 }
