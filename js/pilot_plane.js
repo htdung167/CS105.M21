@@ -86,7 +86,7 @@ export class Pilot {
     this.mesh.add(this.earR);
   }
 }
-var mousePos = { x: 0, y: 0 };
+
 export class Plane {
   constructor() {
     this.mesh = new Object3D();
@@ -267,6 +267,7 @@ export class Plane {
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
   }
+
   normalize(v, vmin, vmax, tmin, tmax) {
     var nv = Math.max(Math.min(v, vmax), vmin);
     var dv = vmax - vmin;
@@ -281,6 +282,12 @@ export class Plane {
     var targetX = this.normalize(mousePos.x, -0.75, 0.75, -100, 100);
     this.mesh.position.y = targetY;
     this.mesh.position.x = targetX;
-    this.propeller.rotation.x += 0.3;
+    // this.propeller.rotation.x += 0.3;
+    // console.log(mousePos);
+  }
+
+  animatePlane(){
+    this.propeller.rotation.x += 0.2;
+
   }
 }
