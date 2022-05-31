@@ -117,6 +117,8 @@ class Game {
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
     plane.mesh.position.y = 200;
+    plane.mesh.position.z = -70;
+
 
     let mousePos = { x: 0, y: 0 };
     document.addEventListener('mousemove', (event) => {
