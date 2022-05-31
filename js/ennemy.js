@@ -74,18 +74,21 @@ import {
 //       this.mesh.position.z = z;
 //     }
 // }
-export class Ennemy{
+export class Ennemy {
   constructor() {
     this.geom = new TetrahedronGeometry(10, 2);
     this.mat = new MeshPhongMaterial({
-          color: 0xa52a2a,
-          shininess: 0,
-          flatShading: true,
-        });
+      color: 0xa52a2a,
+      shininess: 0,
+      flatShading: true,
+    });
     this.mesh = new Mesh(this.geom, this.mat);
     this.mesh.castShadow = true;
     this.angle = 0;
-    this.dist = 0; 
+    this.dist = 0;
+  }
+  updateRotationZ() {
+    this.mesh.rotation.z += 0.1;
   }
 }
 export class EnnemiesHolder {
@@ -94,7 +97,6 @@ export class EnnemiesHolder {
     this.ennemiesInUse = [];
     this.ennemiesPool = ennemiesPool;
     this.nEnnemies = nEnnemies;
-
   }
   spawnEnnemies() {
     for (let i = 0; i < this.nEnnemies; i++) {
@@ -106,11 +108,18 @@ export class EnnemiesHolder {
       }
       ennemy.angle = -(i * 100);
       ennemy.dist = 1200 + Math.random() * 100;
-      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.y =
+        Math.sin(ennemy.angle) * ennemy.dist + Math.random() * -50;
+      ennemy.mesh.position.x =
+        Math.cos(ennemy.angle) * ennemy.dist + Math.random() * 100;
       ennemy.mesh.position.z = -70;
       this.mesh.add(ennemy.mesh);
       this.ennemiesInUse.push(ennemy);
+    }
+  }
+  updateRotationZ(ms) {
+    for (var ennemy of this.ennemiesInUse) {
+      ennemy.updateRotationZ();
     }
   }
 }

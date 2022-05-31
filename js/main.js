@@ -3,6 +3,7 @@ import {
   PerspectiveCamera,
   WebGLRenderer,
   Color,
+  Fog,
   Mesh,
   BoxGeometry,
   MeshNormalMaterial,
@@ -13,6 +14,13 @@ import {
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
+import { Plane } from "./pilot_plane.js";
+import { Sky } from "./sky.js";
+import { Sea } from "./sea.js ";
+import { Light } from "./light.js";
+import { Ennemy, EnnemiesHolder } from "./ennemy.js";
+import { ChainCoin } from "./coin.js";
+var ennemiesPool = [];
 var Colors = {
   red: 0xf25346,
   white: 0xd8d0d1,
@@ -21,13 +29,68 @@ var Colors = {
   brownDark: 0x23190f,
   blue: 0x68c3c0,
 };
-import { Plane } from "./pilot_plane.js";
-import { Sky } from "./sky.js";
-import { Sea } from "./sea.js ";
-import { Light } from "./light.js";
-import { Ennemy, EnnemiesHolder } from "./ennemy.js";
-import { ChainCoin } from "./coin.js";
-var ennemiesPool = [];
+
+var game = {
+      speed: 0,
+      initSpeed: 0.00035,
+      baseSpeed: 0.00035,
+      targetBaseSpeed: 0.00035,
+      incrementSpeedByTime: 0.0000025,
+      incrementSpeedByLevel: 0.000005,
+      distanceForSpeedUpdate: 100,
+      speedLastUpdate: 0,
+
+      distance: 0,
+      ratioSpeedDistance: 50,
+      energy: 100,
+      ratioSpeedEnergy: 3,
+
+      level: 1,
+      levelLastUpdate: 0,
+      distanceForLevelUpdate: 1000,
+
+      planeDefaultHeight: 100,
+      planeAmpHeight: 80,
+      planeAmpWidth: 75,
+      planeMoveSensivity: 0.005,
+      planeRotXSensivity: 0.0008,
+      planeRotZSensivity: 0.0004,
+      planeFallSpeed: 0.001,
+      planeMinSpeed: 1.2,
+      planeMaxSpeed: 1.6,
+      planeSpeed: 0,
+      planeCollisionDisplacementX: 0,
+      planeCollisionSpeedX: 0,
+
+      planeCollisionDisplacementY: 0,
+      planeCollisionSpeedY: 0,
+
+      seaRadius: 600,
+      seaLength: 800,
+      //seaRotationSpeed:0.006,
+      wavesMinAmp: 5,
+      wavesMaxAmp: 20,
+      wavesMinSpeed: 0.001,
+      wavesMaxSpeed: 0.003,
+
+      cameraFarPos: 500,
+      cameraNearPos: 150,
+      cameraSensivity: 0.002,
+
+      coinDistanceTolerance: 15,
+      coinValue: 3,
+      coinsSpeed: 0.5,
+      coinLastSpawn: 0,
+      distanceForCoinsSpawn: 100,
+
+      ennemyDistanceTolerance: 10,
+      ennemyValue: 10,
+      ennemiesSpeed: 0.6,
+      ennemyLastSpawn: 0,
+      distanceForEnnemiesSpawn: 50,
+
+      status: "playing",
+};
 
 
 class Game {
@@ -73,6 +136,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
+    scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
@@ -82,7 +146,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 200);
+    camera.position.set(0, 200, 300);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -123,7 +187,8 @@ class Game {
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
     plane.mesh.position.y = 0;
-    plane.mesh.position.x = 200;
+    plane.mesh.position.x = 0;
+    plane.mesh.position.z = 0;
 
     document.addEventListener("mousemove", (event) => {
       const width = canvas.clientWidth;
@@ -169,13 +234,14 @@ class Game {
       const ennemy = new Ennemy();
       ennemiesPool.push(ennemy);
     }
-    var nEnnemies = 30; // game level
+    var nEnnemies = 50 // game level
     const ennemiesHolder = new EnnemiesHolder(ennemiesPool, nEnnemies);
     ennemiesHolder.spawnEnnemies();
     ennemiesHolder.mesh.position.y = -1000;
 
     ennemiesHolder.mesh.tick = (ms) => {
       ennemiesHolder.mesh.rotation.z += 0.001;
+      ennemiesHolder.updateRotationZ(ms);
     };
     return ennemiesHolder;
   }
@@ -240,9 +306,22 @@ class Game {
     this.renderer.setSize(width, height, false);
   }
   checkCollisions() {
-    const distance = this.plane.mesh.position.distanceTo(this.ennemiesHolder.mesh.position);
-    if (distance < 100) {
+    var diffPos = airplane.mesh.position.clone().sub(ennemy.mesh.position.clone());
+    var d = diffPos.length();
+    if (d < game.ennemyDistanceTolerance) {
       console.log("Collision");
+      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+      this.mesh.remove(ennemy.mesh);
+      game.planeCollisionSpeedX = (100 * diffPos.x) / d;
+      game.planeCollisionSpeedY = (100 * diffPos.y) / d;
+      this.light.hemisphereLight.intensity = 2;
+
+      // removeEnergy();
+      i--;
+    } else if (ennemy.angle > Math.PI) {
+      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+      this.mesh.remove(ennemy.mesh);
+      i--;
     }
   }
 }

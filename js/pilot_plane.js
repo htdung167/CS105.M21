@@ -276,8 +276,8 @@ export class Plane {
   }
 
   updatePlane(mousePos) {
-    var targetY = this.normalize(mousePos.y, -.5, .5, 20, 300);
-    var targetX = this.normalize(mousePos.x, -.5, .5, -200, 200);
+    var targetY = this.normalize(mousePos.y, -0.5, 0.5, 150, 300);
+    var targetX = this.normalize(mousePos.x, -0.5, 0.5, -300, 300);
     this.mesh.position.y = targetY;
     this.mesh.position.x = targetX;
     // this.propeller.rotation.x += 0.3;
@@ -286,6 +286,25 @@ export class Plane {
 
   animatePlane(){
     this.propeller.rotation.x += 0.2;
-
   }
+  //Check if the plane meet enneimy
+  // checkCollision(){
+  //   var diffPos = this.mesh.position.clone().sub(ennemy.mesh.position.clone());
+  //   var d = diffPos.length();
+  //   if (d < 10) {
+  //     // console.log("Collision!");
+  //     ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+  //     this.mesh.remove(ennemy.mesh);
+  //     game.planeCollisionSpeedX = (100 * diffPos.x) / d;
+  //     game.planeCollisionSpeedY = (100 * diffPos.y) / d;
+  //     ambientLight.intensity = 2;
+
+  //     removeEnergy();
+  //     i--;
+  //   } else if (ennemy.angle > Math.PI) {
+  //     ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+  //     this.mesh.remove(ennemy.mesh);
+  //     i--;
+  //   }
+  // }
 }
