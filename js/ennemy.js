@@ -94,6 +94,7 @@ export class EnnemiesHolder {
     this.ennemiesInUse = [];
     this.ennemiesPool = ennemiesPool;
     this.nEnnemies = nEnnemies;
+
   }
   spawnEnnemies() {
     for (let i = 0; i < this.nEnnemies; i++) {

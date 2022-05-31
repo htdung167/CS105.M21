@@ -63,6 +63,7 @@ class Game {
     // loop
     // this.loop();
     // Resize
+    this.checkCollisions();
     this.handleResize();
     //Render
     this.render(1);
@@ -74,7 +75,6 @@ class Game {
     scene.background = new Color(0xffcc99);
     return scene;
   }
-
 
   // Create Camera
   createCamera(canvas) {
@@ -103,12 +103,10 @@ class Game {
     return renderer;
   }
 
-
   createLight() {
     const light = new Light();
     return light;
   }
-
 
   // createCube() {
   //   const cubeGeometry = new BoxGeometry(6, 6, 6);
@@ -117,7 +115,6 @@ class Game {
   //   cube.position.set(-4, 3, 0);
   //   return cube;
   // }
-
 
   //Create Plane
   createPlane(canvas) {
@@ -128,21 +125,20 @@ class Game {
     plane.mesh.position.y = 0;
     plane.mesh.position.x = 200;
 
-    
-    document.addEventListener('mousemove', (event) => {
+    document.addEventListener("mousemove", (event) => {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-    
+
       var tx = -1 + (event.clientX / width) * 2;
       var ty = 1 - (event.clientY / height) * 2;
-    
+
       mousePos = { x: tx, y: ty };
       this.plane.updatePlane(mousePos);
     });
 
     plane.mesh.tick = () => {
       plane.animatePlane();
-    }
+    };
 
     return plane;
   }
@@ -243,7 +239,14 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
+  checkCollisions() {
+    const distance = this.plane.mesh.position.distanceTo(this.ennemiesHolder.mesh.position);
+    if (distance < 100) {
+      console.log("Collision");
+    }
+  }
 }
+  
 
 window.addEventListener("load", () => {
   new Game(document.querySelector("#webglOutput"));
