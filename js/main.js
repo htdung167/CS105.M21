@@ -28,6 +28,8 @@ import { Light } from "./light.js";
 import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
 var ennemiesPool = [];
+
+
 class Game {
   constructor(canvas) {
     //
@@ -36,12 +38,8 @@ class Game {
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
-    this.mousePos = { x: 0, y: 0 };
 
-    //Add Cube
-    // const cube = this.createCube();
-    // this.scene.add(cube);
-    this.plane = this.createPlane();
+    this.plane = this.createPlane(canvas);
     this.scene.add(this.plane.mesh);
     // Add sky
     this.sky = this.createSky(50);
@@ -61,9 +59,9 @@ class Game {
     this.scene.add(this.chaincoins.mesh);
 
     // console.log(this.plane.updatePlane())
-    document.addEventListener("mousemove", this.handleMouseMove, false);
+    // document.addEventListener("mousemove", this.handleMouseMove, false);
     // loop
-    this.loop();
+    // this.loop();
     // Resize
     this.handleResize();
     //Render
@@ -76,13 +74,15 @@ class Game {
     scene.background = new Color(0xffcc99);
     return scene;
   }
+
+
   // Create Camera
   createCamera(canvas) {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 2000);
+    camera.position.set(0, 200, 200);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -102,10 +102,14 @@ class Game {
     renderer.setPixelRatio(window.devicePixelRatio);
     return renderer;
   }
+
+
   createLight() {
     const light = new Light();
     return light;
   }
+
+
   createCube() {
     const cubeGeometry = new BoxGeometry(6, 6, 6);
     const cubeMaterial = new MeshNormalMaterial();
@@ -113,12 +117,32 @@ class Game {
     cube.position.set(-4, 3, 0);
     return cube;
   }
-  //Create Pilot
-  createPlane() {
-    const plane = new Plane(this.mousePos);
+
+
+  //Create Plane
+  createPlane(canvas) {
+    const plane = new Plane();
+    let mousePos = { x: 0, y: 0 };
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
-    plane.mesh.position.y = 200;
+    plane.mesh.position.y = mousePos.y;
+
+    
+    document.addEventListener('mousemove', (event) => {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+    
+      var tx = -1 + (event.clientX / width) * 2;
+      var ty = 1 - (event.clientY / height) * 2;
+    
+      mousePos = { x: tx, y: ty };
+      this.plane.updatePlane(mousePos);
+    });
+
+    plane.mesh.tick = () => {
+      plane.animatePlane();
+    }
+
     return plane;
   }
   // Create Sky
@@ -128,7 +152,7 @@ class Game {
     sky.mesh.tick = (ms) => {
       sky.updateRotationZ(ms);
     };
-    console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
+    // console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
     return sky;
   }
 
@@ -139,7 +163,7 @@ class Game {
     sea.mesh.tick = (ms) => {
       sea.mesh.rotation.z += 0.001;
     };
-    console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
+    // console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
 
@@ -166,6 +190,7 @@ class Game {
     let i = 0;
     let oldTime = 0;
     let newTime = 0;
+    // console.log(this.mousePos)
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins();
       newTime = new Date().getTime();
@@ -184,27 +209,14 @@ class Game {
     };
 
     return coinsHolder;
-
-    // const coins = new ChainCoin();
-    // coins.mesh.position.y = -1100;
-    // coins.mesh.position.z = -70;
-    // // console.log(coins.coinsPool)
-    // let lstCoin = coins.mesh.children;
-    // console.log(lstCoin);
-    // coins.mesh.tick = (ms) => {
-    //   let lstCoin = coins.mesh.children;
-    //   for (let i = 0; i < lstCoin.length; i++) {
-    //     lstCoin[i].rotation.y += 0.1 + (Math.random() * 2) / 10;
-    //   }
-    //   coins.mesh.rotation.z += 0.001;
-    // };
-    // return coins;
   }
+
   update(ms) {
     this.sky.mesh.tick(ms);
     this.sea.mesh.tick(ms);
     this.ennemiesHolder.mesh.tick();
     this.chaincoins.mesh.tick(ms);
+    this.plane.mesh.tick();
   }
 
   render(ms = 10000) {
@@ -212,13 +224,6 @@ class Game {
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render.bind(this));
   }
-
-  // loop() {
-  //   this.sky.mesh.rotation.z += 1;
-
-  //   this.render();
-  //   requestAnimationFrame(this.loop);
-  // }
 
   handleResize() {
     window.addEventListener("resize", () => {
@@ -237,35 +242,8 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
-  normalize(v, vmin, vmax, tmin, tmax) {
-    var nv = Math.max(Math.min(v, vmax), vmin);
-    var dv = vmax - vmin;
-    var pc = (nv - vmin) / dv;
-    var dt = tmax - tmin;
-    var tv = tmin + pc * dt;
-    return tv;
-  }
-
-  updatePlane() {
-    var targetY = this.normalize(this.mousePos.y, -0.75, 0.75, 25, 175);
-    var targetX = this.normalize(this.mousePos.x, -0.75, 0.75, -100, 100);
-    this.plane.mesh.position.y =  targetY;
-    this.plane.mesh.position.x =  targetX;
-    this.plane.propeller.rotation.x += 0.3;
-  }
-  loop() {
-    //call updatePlane function
-    this.updatePlane();
-    // this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.loop());
-  }
-  
-  handleMouseMove(event) {
-    var tx = -1 + (event.clientX / this.width) * 2;
-    var ty = 1 - (event.clientY / this.height) * 2;
-    this.mousePos = { x: tx, y: ty };
-  }
 }
+
 window.addEventListener("load", () => {
   new Game(document.querySelector("#webglOutput"));
 });

@@ -264,5 +264,28 @@ export class Plane {
 
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
-  }  
+  }
+
+  normalize(v, vmin, vmax, tmin, tmax) {
+    var nv = Math.max(Math.min(v, vmax), vmin);
+    var dv = vmax - vmin;
+    var pc = (nv - vmin) / dv;
+    var dt = tmax - tmin;
+    var tv = tmin + pc * dt;
+    return tv;
+  }
+
+  updatePlane(mousePos) {
+    var targetY = this.normalize(mousePos.y, -0.75, 0.75, 25, 175);
+    var targetX = this.normalize(mousePos.x, -0.75, 0.75, -100, 100);
+    this.mesh.position.y = targetY;
+    this.mesh.position.x = targetX;
+    // this.propeller.rotation.x += 0.3;
+    // console.log(mousePos);
+  }
+
+  animatePlane(){
+    this.propeller.rotation.x += 0.2;
+
+  }
 }
