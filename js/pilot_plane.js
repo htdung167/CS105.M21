@@ -276,8 +276,8 @@ export class Plane {
   }
 
   updatePlane(mousePos) {
-    var targetY = this.normalize(mousePos.y, -0.75, 0.75, 25, 175);
-    var targetX = this.normalize(mousePos.x, -0.75, 0.75, -100, 100);
+    var targetY = this.normalize(mousePos.y, -.5, .5, 20, 300);
+    var targetX = this.normalize(mousePos.x, -.5, .5, -200, 200);
     this.mesh.position.y = targetY;
     this.mesh.position.x = targetX;
     // this.propeller.rotation.x += 0.3;

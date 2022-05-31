@@ -110,13 +110,13 @@ class Game {
   }
 
 
-  createCube() {
-    const cubeGeometry = new BoxGeometry(6, 6, 6);
-    const cubeMaterial = new MeshNormalMaterial();
-    const cube = new Mesh(cubeGeometry, cubeMaterial);
-    cube.position.set(-4, 3, 0);
-    return cube;
-  }
+  // createCube() {
+  //   const cubeGeometry = new BoxGeometry(6, 6, 6);
+  //   const cubeMaterial = new MeshNormalMaterial();
+  //   const cube = new Mesh(cubeGeometry, cubeMaterial);
+  //   cube.position.set(-4, 3, 0);
+  //   return cube;
+  // }
 
 
   //Create Plane
@@ -125,7 +125,8 @@ class Game {
     let mousePos = { x: 0, y: 0 };
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
-    plane.mesh.position.y = mousePos.y;
+    plane.mesh.position.y = 0;
+    plane.mesh.position.x = 200;
 
     
     document.addEventListener('mousemove', (event) => {
