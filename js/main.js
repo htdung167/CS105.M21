@@ -21,7 +21,7 @@ var Colors = {
   brownDark: 0x23190f,
   blue: 0x68c3c0,
 };
-import { Plane, Pilot } from "./pilot_plane.js";
+import { Plane } from "./pilot_plane.js";
 import { Sky } from "./sky.js";
 import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
@@ -30,10 +30,14 @@ import { ChainCoin } from "./coin.js";
 var ennemiesPool = [];
 class Game {
   constructor(canvas) {
+    //
+    this.width = canvas.clientWidth;
+    this.height = canvas.clientHeight;
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
     this.renderer = this.createRenderer(canvas);
     this.mousePos = { x: 0, y: 0 };
+
     //Add Cube
     // const cube = this.createCube();
     // this.scene.add(cube);
@@ -55,16 +59,17 @@ class Game {
     // Add coin test
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
+
+    // console.log(this.plane.updatePlane())
+    document.addEventListener("mousemove", this.handleMouseMove, false);
+    // loop
+    this.loop();
     // Resize
     this.handleResize();
     //Render
     this.render(1);
-    
-    document.addEventListener("mousemove", this.handleMouseMove, false);
-    // loop
-    this.loop();
   }
-  
+
   // Create Scene
   createScene() {
     const scene = new Scene();
@@ -110,7 +115,7 @@ class Game {
   }
   //Create Pilot
   createPlane() {
-    const plane = new Plane();
+    const plane = new Plane(this.mousePos);
     // pilot.updateHairs();
     plane.mesh.scale.set(0.25, 0.25, 0.25);
     plane.mesh.position.y = 200;
@@ -172,8 +177,8 @@ class Game {
       // console.log(rand);
 
       if (rand == 16 || rand == 7) {
-        console.log("Pool:", coinsHolder.coinsPool.length);
-        console.log("InUse:", coinsHolder.coinsInUse.length);
+        // console.log("Pool:", coinsHolder.coinsPool.length);
+        // console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
     };
@@ -232,15 +237,33 @@ class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
   }
-  loop() {
-    this.plane.updatePlane(this.mousePos);
-    // renderer.render(scene, camera);
-    requestAnimationFrame(this.loop);
+  normalize(v, vmin, vmax, tmin, tmax) {
+    var nv = Math.max(Math.min(v, vmax), vmin);
+    var dv = vmax - vmin;
+    var pc = (nv - vmin) / dv;
+    var dt = tmax - tmin;
+    var tv = tmin + pc * dt;
+    return tv;
   }
+
+  updatePlane() {
+    var targetY = this.normalize(this.mousePos.y, -0.75, 0.75, 25, 175);
+    var targetX = this.normalize(this.mousePos.x, -0.75, 0.75, -100, 100);
+    this.plane.mesh.position.y =  targetY;
+    this.plane.mesh.position.x =  targetX;
+    this.plane.propeller.rotation.x += 0.3;
+  }
+  loop() {
+    //call updatePlane function
+    this.updatePlane();
+    // this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(this.loop());
+  }
+  
   handleMouseMove(event) {
-    var tx = -1 + (event.clientX / canvas.clientWidth) * 2;
-    var ty = 1 - (event.clientY / canvas.clientHeight) * 2;
-    mousePos = { x: tx, y: ty };
+    var tx = -1 + (event.clientX / this.width) * 2;
+    var ty = 1 - (event.clientY / this.height) * 2;
+    this.mousePos = { x: tx, y: ty };
   }
 }
 window.addEventListener("load", () => {
