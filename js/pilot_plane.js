@@ -272,12 +272,14 @@ export class Plane {
     var pc = (nv - vmin) / dv;
     var dt = tmax - tmin;
     var tv = tmin + pc * dt;
+    // var tv = tmin + (v + 1) / 2 * dt;
+
     return tv;
   }
 
   updatePlane(mousePos) {
-    var targetY = this.normalize(mousePos.y, -0.9, 0.9, 150, 300);
-    var targetX = this.normalize(mousePos.x, -0.9, 0.9, -300, 300);
+    var targetY = this.normalize(mousePos.y, -0.75, 1.5, 158, 350);
+    var targetX = this.normalize(mousePos.x, -0.75, 0.75, -200, 200);
     this.mesh.position.y = targetY;
     this.mesh.position.x = targetX;
     // this.propeller.rotation.x += 0.3;
