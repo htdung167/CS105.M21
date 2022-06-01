@@ -18,6 +18,7 @@ export class ChainCoin {
         this.mesh = new Group();
         this.coinsInUse = [];
         this.coinsPool = [];
+        this.coinsTouched = 0;
         for(let i = 0; i < nCoins; i++)
         {
             let coin = new Coin();
@@ -41,38 +42,15 @@ export class ChainCoin {
             }else{
                 coin = new Coin();
             }
-            this.mesh.add(coin.mesh);
-            this.coinsInUse.push(coin);
+            this.mesh.add(coin.mesh);   
             coin.angle = -(i * 0.02)
             coin.dist = hCoins + Math.cos(i*0.5)*amplitude;
             coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
-            coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
+            coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
+            // coin.mesh.position.z = ; 
+            this.coinsInUse.push(coin);
+
         }
-
-        // for(let i = 0; i < nCoins; i++){
-        //     let coin = new Coin();
-        //     this.coinsPool.push(coin);
-        // }
-        // // let heightMaxFly= 1600;
-        // // let hCoins = 1320;
-        // // console.log(hCoins);
-        // for(let i = 0; i < nCoins; i++){
-        //     let coin = new Coin();
-        //     this.mesh.add(coin.mesh);
-        //     // coinsPool.push(coin.mesh);
-        //     coin.dist = hCoins + Math.cos(i*0.5)*amplitude; //1265 - 1340
-        //     // coin.dist = 1340;
-        //     // console.log(coin.dist);
-        //     // coin.angle = -0.02 * i;
-        //     coin.angle = Math.PI / 2 - 0.005 * i;
-        //     // coin.mesh.position.y = - heightSea + Math.sin(coin.angle) * coin.dist;
-        //     coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
-        //     // coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
-        //     coin.mesh.position.x = Math.cos(coin.angle) * coin.dist; 
-        //     coin.castShadow = true;
-        //     coin.receiveShadow = true;
-
-        // }
     }
     rotationCoins(){
         for(let i = 0; i < this.coinsInUse.length; i++){
@@ -82,16 +60,37 @@ export class ChainCoin {
                 this.coinsPool.unshift(this.coinsInUse.splice(i, 1)[0]);
                 this.mesh.remove(coin.mesh);
                 i--;
-                // console.log(this.coinsPool.length)
-                // coin.angle -= Math.PI * 2;
-                // console.log("change angle coin")
-                // console.log(this.coinsInUse.length)
             }
             coin.mesh.position.y = coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
             coin.mesh.rotation.y += 0.1 + (Math.random() * 2) / 10; 
             
         }
+
+    }
+
+    touchPlane(obj, delta_pos){
+        for(let i = 0; i < this.coinsInUse.length; i++){
+            let coin = this.coinsInUse[i];
+            var diffPos = obj.mesh.position.clone().sub(coin.mesh.position.clone()).sub(delta_pos);
+            // console.log('plane:', obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z)
+            // console.log('coin:',  coin.mesh.position.x, coin.mesh.position.y, coin.mesh.position.z)
+            // console.log(diffPos.x, diffPos.y, diffPos.z)
+            // console.log(diffPos);
+            var d = diffPos.length();
+            if(d < 20){
+                this.coinsPool.unshift(this.coinsInUse.splice(i, 1)[0]);
+                this.mesh.remove(coin.mesh);
+                i--;
+                this.coinsTouched += 1;
+                // CỘng điểm
+            }
+
+            this.is_touched = false;
+            
+        }
+        
+
     }
     
 }

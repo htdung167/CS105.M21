@@ -4,6 +4,7 @@ import {
   WebGLRenderer,
   Color,
   Fog,
+  Vector3,
   Mesh,
   BoxGeometry,
   MeshNormalMaterial,
@@ -146,7 +147,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 300);
+    camera.position.set(0, 200, 150);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -188,7 +189,7 @@ class Game {
     plane.mesh.scale.set(0.25, 0.25, 0.25);
     plane.mesh.position.y = 0;
     plane.mesh.position.x = 0;
-    plane.mesh.position.z = 0;
+    plane.mesh.position.z = -70;
 
     document.addEventListener("mousemove", (event) => {
       const width = canvas.clientWidth;
@@ -248,14 +249,22 @@ class Game {
 
   createCoin() {
     const coinsHolder = new ChainCoin(20);
-    coinsHolder.mesh.position.y = -1100;
-    coinsHolder.mesh.position.z = -70;
+    let delta_x = 0;
+    let delta_y = -1100;
+    let delta_z = -70;
+    let delta_pos = new Vector3(delta_x, delta_y, delta_z);
+    coinsHolder.mesh.position.x = delta_x;
+    coinsHolder.mesh.position.y = delta_y;
+    coinsHolder.mesh.position.z = delta_z;
     let i = 0;
     let oldTime = 0;
     let newTime = 0;
     // console.log(this.mousePos)
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins();
+      coinsHolder.touchPlane(this.plane, delta_pos);
+      console.log(coinsHolder.coinsTouched);
+      // console.log(this.plane.mesh.position)
       newTime = new Date().getTime();
       let deltaTime = newTime - oldTime;
       oldTime = newTime;
