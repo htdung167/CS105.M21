@@ -97,6 +97,7 @@ export class EnnemiesHolder {
     this.ennemiesInUse = [];
     this.ennemiesPool = ennemiesPool;
     this.nEnnemies = nEnnemies;
+    this.ennemyTouched = 0;
   }
   spawnEnnemies() {
     for (let i = 0; i < this.nEnnemies; i++) {
@@ -117,23 +118,24 @@ export class EnnemiesHolder {
       this.ennemiesInUse.push(ennemy);
     }
   }
-  checkCollision() {
-    var diffPos = this.mesh.position.clone().sub(ennemy.mesh.position.clone());
-    var d = diffPos.length();
-    if (d < 10) {
-      // console.log("Collision!");
-      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
-      this.mesh.remove(ennemy.mesh);
-      game.planeCollisionSpeedX = (100 * diffPos.x) / d;
-      game.planeCollisionSpeedY = (100 * diffPos.y) / d;
-      ambientLight.intensity = 2;
+  touchPlane(obj, delta_pos) {
+    for (let i = 0; i < this.ennemiesInUse.length; i++) {
+      let ennemy = this.ennemiesInUse[i];
+      var diffPos = obj.mesh.position.clone().sub(ennemy.mesh.position.clone()).sub(delta_pos);
+      // console.log('plane:', obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z)
+      // console.log('coin:',  coin.mesh.position.x, coin.mesh.position.y, coin.mesh.position.z)
+      // console.log(diffPos.x, diffPos.y, diffPos.z)
+      // console.log(diffPos);
+      var d = diffPos.length();
+      if (d < 20) {
+        this.ennemiesPool.unshift(this.enemiesInUse.splice(i, 1)[0]);
+        this.mesh.remove(ennemy.mesh);
+        i--;
+        this.coinsTouched -= 1;
+        // trừ 1 điểm
+      }
 
-      removeEnergy();
-      i--;
-    } else if (ennemy.angle > Math.PI) {
-      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
-      this.mesh.remove(ennemy.mesh);
-      i--;
+      this.is_touched = false;
     }
   }
   updateRotationZ(ms) {

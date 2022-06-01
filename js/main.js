@@ -147,7 +147,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 150);
+    camera.position.set(0, 200, 200);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -238,11 +238,19 @@ class Game {
     var nEnnemies = 50 // game level
     const ennemiesHolder = new EnnemiesHolder(ennemiesPool, nEnnemies);
     ennemiesHolder.spawnEnnemies();
-    ennemiesHolder.mesh.position.y = -1000;
+    let delta_x = 0;
+    let delta_y = -1000;
+    let delta_z = -70;
+    let delta_pos = new Vector3(delta_x, delta_y, delta_z);
+    ennemiesHolder.mesh.position.x = delta_x;
+    ennemiesHolder.mesh.position.y = delta_y;
+    ennemiesHolder.mesh.position.z = delta_z;
 
     ennemiesHolder.mesh.tick = (ms) => {
       ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.updateRotationZ(ms);
+      ennemiesHolder.touchPlane(this.plane, delta_pos);
+      // console.log(ennemiesHolder.coinsTouched);
     };
     return ennemiesHolder;
   }
