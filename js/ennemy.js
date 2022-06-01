@@ -117,6 +117,25 @@ export class EnnemiesHolder {
       this.ennemiesInUse.push(ennemy);
     }
   }
+  checkCollision() {
+    var diffPos = this.mesh.position.clone().sub(ennemy.mesh.position.clone());
+    var d = diffPos.length();
+    if (d < 10) {
+      // console.log("Collision!");
+      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+      this.mesh.remove(ennemy.mesh);
+      game.planeCollisionSpeedX = (100 * diffPos.x) / d;
+      game.planeCollisionSpeedY = (100 * diffPos.y) / d;
+      ambientLight.intensity = 2;
+
+      removeEnergy();
+      i--;
+    } else if (ennemy.angle > Math.PI) {
+      ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+      this.mesh.remove(ennemy.mesh);
+      i--;
+    }
+  }
   updateRotationZ(ms) {
     for (var ennemy of this.ennemiesInUse) {
       ennemy.updateRotationZ();
