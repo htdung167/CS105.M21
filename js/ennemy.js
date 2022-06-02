@@ -67,8 +67,6 @@ export class EnnemiesHolder {
       // console.log(diffPos);
       var d = diffPos.length();
       if (d < 20) {
-        particlesHolder.spawnParticles(ennemy.mesh.position.clone());
-
         console.log('touched');
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);

@@ -98,6 +98,7 @@ var game = {
 class Game {
   constructor(canvas) {
     //
+    
     this.width = canvas.clientWidth;
     this.height = canvas.clientHeight;
     this.scene = this.createScene();
@@ -122,12 +123,11 @@ class Game {
     // Add coin test
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
+    this.score = document.getElementById("score");
     // Add particles
     // this.particlesHolder = this.createParticles(50);
     // this.scene.add(this.particlesHolder.mesh);
-
     // console.log(this.plane.updatePlane())
-    // document.addEventListener("mousemove", this.handleMouseMove, false);
     // loop
     // this.loop();
     // Resize
@@ -250,7 +250,7 @@ class Game {
       // ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.RotationEnnemy();
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      // console.log(ennemiesHolder.ennemiesTouched);
+      this.score.innerHTML = ennemiesHolder.ennemiesTouched;
     };
     ennemiesHolder.spawnEnnemies();
     return ennemiesHolder;
@@ -275,11 +275,11 @@ class Game {
     let i = 0;
     let oldTime = 0;
     let newTime = 0;
-    // console.log(this.mousePos)
+    
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins();
       coinsHolder.touchPlane(this.plane, delta_pos);
-      console.log(coinsHolder.coinsTouched);
+      // console.log(coinsHolder.coinsTouched);
       // console.log(this.plane.mesh.position)
       newTime = new Date().getTime();
       let deltaTime = newTime - oldTime;
@@ -294,8 +294,10 @@ class Game {
         // console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
+      var score = 0;
+      score += coinsHolder.coinsTouched;
+      this.score.innerHTML = score;
     };
-
     return coinsHolder;
   }
 
