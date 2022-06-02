@@ -12,6 +12,9 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
+  AudioLoader,
+  AudioListener,
+  Audio
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
@@ -184,13 +187,6 @@ class Game {
     return light;
   }
 
-  // createCube() {
-  //   const cubeGeometry = new BoxGeometry(6, 6, 6);
-  //   const cubeMaterial = new MeshNormalMaterial();
-  //   const cube = new Mesh(cubeGeometry, cubeMaterial);
-  //   cube.position.set(-4, 3, 0);
-  //   return cube;
-  // }
 
   //Create Plane
   createPlane(canvas) {
@@ -219,14 +215,14 @@ class Game {
 
     return plane;
   }
+
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1000, -100);
+    sky.setPosition(0, -1050, -100);
     sky.mesh.tick = () => {
-      sky.updateRotationZ(this.speed);
+      sky.updateRotation(this.speed);
     };
-    // console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
     return sky;
   }
 
@@ -237,7 +233,6 @@ class Game {
     sea.mesh.tick = (ms) => {
       sea.mesh.rotation.z += this.speed;
     };
-    // console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
 
@@ -283,14 +278,20 @@ class Game {
     let oldTime = 0;
     let newTime = 0;
     let old_score = 0;
-    // let soundPlayer = document.getElementById('soundCoin');
+
+    // Thêm nhạc khi chạm
+    var audioLoader = new AudioLoader();
+    var listener = new AudioListener();
+    var audio = new Audio(listener);
+    var stream = "./sound/coin_audio.mp3"
     
+
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
-      newTime = new Date().getTime();
-      let deltaTime = newTime - oldTime;
-      oldTime = newTime;
+      // newTime = new Date().getTime();
+      // let deltaTime = newTime - oldTime;
+      // oldTime = newTime;
 
       let rand = Math.floor(Math.random() * 100);
       // console.log(rand);
@@ -300,11 +301,21 @@ class Game {
       }
       var score = 0;
       score += coinsHolder.coinsTouched;
+      this.score.innerHTML = "Score: " + score;
+
+      // Thêm nhạc khi va chạm 
       if(score != old_score){
         old_score = score
+        if(audio.isPlaying){
+          audio.stop();
+        }
+        audioLoader.load(stream, function(buffer) {
+          audio.setBuffer(buffer);
+          audio.setLoop(false);
+          audio.play();
+        });
       }
 
-      this.score.innerHTML = score;
     };
     return coinsHolder;
   }

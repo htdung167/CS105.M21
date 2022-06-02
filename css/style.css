@@ -17,6 +17,7 @@ body{
     left: 0;
     width: 100px;
     overflow: hidden;
+    font-family: 'Kelly Slab', cursive;
 }
 #play-audio{
     position: absolute;
@@ -24,6 +25,7 @@ body{
     left: 100px;
     width: 100px;
     overflow: hidden;
+    font-family: 'Kelly Slab', cursive;
 }
 #score_label{
     position: absolute;
@@ -40,6 +42,16 @@ body{
 }
 #score {
     text-align: center;
-    position: relative
-    
+    position: relative;
+    font-family: 'Kelly Slab', cursive;
+    font-size: 20px;
+}
+
+#soundtrack{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* overflow: hidden; */
 }

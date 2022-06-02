@@ -88,10 +88,10 @@ export class ChainCoin {
                 i--;
                 // CỘng điểm
                 this.coinsTouched += 1;
-                let faudio = "./audio/coin_audio.mp3"
-                var audio = new Audio(faudio);
-                audio.play();
-                // this.audioLoader.load(faudio, function(buffer){
+                // let faudio = "./audio/coin_audio.mp3"
+                // var audio = new Audio(faudio);
+                // audio.play();
+                // // this.audioLoader.load(faudio, function(buffer){
                 //     this.audio.setBuffer(buffer);
                 //     this.audio.setLoop(true);
                 //     this.audio.play();
