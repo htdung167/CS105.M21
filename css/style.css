@@ -1,8 +1,36 @@
 body{
     margin: 0;
     padding: 0;
-    
-
+    overflow: hidden;
+}
+#container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#stop-audio{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    overflow: hidden;
+}
+#play-audio{
+    position: absolute;
+    top: 0;
+    left: 100px;
+    width: 100px;
+    overflow: hidden;
+}
+#score_label{
+    position: absolute;
+    text-align: center;
+    top: 0;
+    right: 50%;
+    width: 200px;
     overflow: hidden;
 }
 #webglOutput {
