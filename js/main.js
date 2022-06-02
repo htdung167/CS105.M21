@@ -21,6 +21,7 @@ import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
 import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
+import { ParticlesHolder, Particle } from "./particles.js";
 var ennemiesPool = [];
 var Colors = {
   red: 0xf25346,
@@ -97,6 +98,7 @@ var game = {
 class Game {
   constructor(canvas) {
     //
+    
     this.width = canvas.clientWidth;
     this.height = canvas.clientHeight;
     this.scene = this.createScene();
@@ -245,12 +247,19 @@ class Game {
       // ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      // console.log(ennemiesHolder.ennemiesTouched);
+      this.score.innerHTML = ennemiesHolder.ennemiesTouched;
     };
     ennemiesHolder.spawnEnnemies();
     return ennemiesHolder;
   }
+  // createParticle(nParticles) {
+  //   const particlesHolder = new ParticlesHolder(nParticles);
+  //   particlesHolder.mesh.position.x = 0;
+  //   particlesHolder.mesh.position.y = 0;
+  //   particlesHolder.mesh.position.z = 0;
+  //   return particlesHolder;
 
+  // }
   createCoin() {
     const coinsHolder = new ChainCoin(20);
     let delta_x = 0;
@@ -263,12 +272,11 @@ class Game {
     let i = 0;
     let oldTime = 0;
     let newTime = 0;
-    // console.log(this.mousePos)
+    
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
       // console.log(coinsHolder.coinsTouched);
-  
       // console.log(this.plane.mesh.position)
       newTime = new Date().getTime();
       let deltaTime = newTime - oldTime;
@@ -283,8 +291,10 @@ class Game {
         // console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
+      var score = 0;
+      score += coinsHolder.coinsTouched;
+      this.score.innerHTML = score;
     };
-
     return coinsHolder;
   }
 
