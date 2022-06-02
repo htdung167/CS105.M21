@@ -21,6 +21,7 @@ import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
 import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
+import { ParticlesHolder, Particle } from "./particles.js";
 var ennemiesPool = [];
 var Colors = {
   red: 0xf25346,
@@ -121,6 +122,9 @@ class Game {
     // Add coin test
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
+    // Add particles
+    // this.particlesHolder = this.createParticles(50);
+    // this.scene.add(this.particlesHolder.mesh);
 
     // console.log(this.plane.updatePlane())
     // document.addEventListener("mousemove", this.handleMouseMove, false);
@@ -251,7 +255,14 @@ class Game {
     ennemiesHolder.spawnEnnemies();
     return ennemiesHolder;
   }
+  // createParticle(nParticles) {
+  //   const particlesHolder = new ParticlesHolder(nParticles);
+  //   particlesHolder.mesh.position.x = 0;
+  //   particlesHolder.mesh.position.y = 0;
+  //   particlesHolder.mesh.position.z = 0;
+  //   return particlesHolder;
 
+  // }
   createCoin() {
     const coinsHolder = new ChainCoin(20);
     let delta_x = 0;
