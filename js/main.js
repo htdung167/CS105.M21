@@ -283,42 +283,25 @@ class Game {
     let oldTime = 0;
     let newTime = 0;
     let old_score = 0;
-    let soundPlayer = document.getElementById('soundCoin');
+    // let soundPlayer = document.getElementById('soundCoin');
+    
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
-      // console.log(coinsHolder.coinsTouched);
-      // console.log(this.plane.mesh.position)
       newTime = new Date().getTime();
       let deltaTime = newTime - oldTime;
       oldTime = newTime;
-      // console.log(deltaTime);
-      // console.log(coinsHolder.coinsPool.length)
+
       let rand = Math.floor(Math.random() * 100);
       // console.log(rand);
 
       if (rand == 16 || rand == 7) {
-        // console.log("Pool:", coinsHolder.coinsPool.length);
-        // console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
       var score = 0;
       score += coinsHolder.coinsTouched;
       if(score != old_score){
         old_score = score
-
-        // player.currentTime =0;
-        soundPlayer.cloneNode().play();
-
-        // if(player.play()){
-        //   player.pause()
-        //   if(player.pause()){
-        //     player.currenTime = 0;
-        //     player.play();
-        //   }
-        // }
-
-
       }
 
       this.score.innerHTML = score;
