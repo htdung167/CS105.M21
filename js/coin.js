@@ -52,10 +52,10 @@ export class ChainCoin {
 
         }
     }
-    rotationCoins(){
+    rotationCoins(speed){
         for(let i = 0; i < this.coinsInUse.length; i++){
             let coin = this.coinsInUse[i];
-            coin.angle += 0.001;
+            coin.angle += speed;
             if(coin.angle > Math.PI){
                 this.coinsPool.unshift(this.coinsInUse.splice(i, 1)[0]);
                 this.mesh.remove(coin.mesh);

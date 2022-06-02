@@ -122,12 +122,11 @@ class Game {
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
 
-    // console.log(this.plane.updatePlane())
-    // document.addEventListener("mousemove", this.handleMouseMove, false);
-    // loop
-    // this.loop();
-    // Resize
-    // this.checkCollisions();
+    // speed
+    this.speed = 0.002;
+    this.increaseSpeed = 0.00001;
+    this.countLoop = 0;
+
     this.handleResize();
     //Render
     this.render(1);
@@ -212,8 +211,8 @@ class Game {
   createSky(nClouds) {
     const sky = new Sky(nClouds);
     sky.setPosition(0, -1000, -100);
-    sky.mesh.tick = (ms) => {
-      sky.updateRotationZ(ms);
+    sky.mesh.tick = () => {
+      sky.updateRotationZ(this.speed);
     };
     // console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
     return sky;
@@ -224,7 +223,7 @@ class Game {
     sea.mesh.position.y = -550;
 
     sea.mesh.tick = (ms) => {
-      sea.mesh.rotation.z += 0.001;
+      sea.mesh.rotation.z += this.speed;
     };
     // console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
@@ -244,7 +243,7 @@ class Game {
 
     ennemiesHolder.mesh.tick = (ms) => {
       // ennemiesHolder.mesh.rotation.z += 0.001;
-      ennemiesHolder.RotationEnnemy();
+      ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
       // console.log(ennemiesHolder.ennemiesTouched);
     };
@@ -266,9 +265,10 @@ class Game {
     let newTime = 0;
     // console.log(this.mousePos)
     coinsHolder.mesh.tick = (ms) => {
-      coinsHolder.rotationCoins();
+      coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
-      console.log(coinsHolder.coinsTouched);
+      // console.log(coinsHolder.coinsTouched);
+  
       // console.log(this.plane.mesh.position)
       newTime = new Date().getTime();
       let deltaTime = newTime - oldTime;
@@ -289,10 +289,15 @@ class Game {
   }
 
   update(ms) {
-    this.sky.mesh.tick(ms);
-    this.sea.mesh.tick(ms);
+    this.countLoop += 1;
+    if(this.countLoop % 1000 == 0){
+      this.speed += this.increaseSpeed;
+      // console.log(this.countLoop);
+    }
+    this.sky.mesh.tick();
+    this.sea.mesh.tick();
     this.ennemiesHolder.mesh.tick();
-    this.chaincoins.mesh.tick(ms);
+    this.chaincoins.mesh.tick();
     this.plane.mesh.tick();
   }
 

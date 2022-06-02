@@ -103,8 +103,9 @@ export class Sky {
     this.mesh.position.z = z;
   }
 
-  updateRotationZ(ms){
-    this.mesh.rotation.z += 0.001 ;
+  updateRotationZ(speed){
+    this.mesh.rotation.z += speed ;
+    // this.mesh.angle += 0.001;
   }
 }
 

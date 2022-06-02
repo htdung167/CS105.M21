@@ -78,10 +78,10 @@ export class EnnemiesHolder {
       // this.is_touched = false;
     }
   }
-  RotationEnnemy() {
+  RotationEnnemy(speed) {
     for (let i = 0; i < this.ennemiesInUse.length; i++) {
       let ennemy = this.ennemiesInUse[i];
-      ennemy.angle += 0.001;
+      ennemy.angle += speed;
       if (ennemy.angle > Math.PI) {
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
