@@ -126,8 +126,8 @@ class Game {
 
     // speed
     this.speed = 0.002;
-    this.increaseSpeed = 0.001;
-    this.countLoop = 0;
+    this.increaseSpeed = 0.0001;
+    this.countLoop = 1;
 
     this.score = document.getElementById("score");
     this.can = document.getElementById("webglOutput");
@@ -282,7 +282,8 @@ class Game {
     let i = 0;
     let oldTime = 0;
     let newTime = 0;
-    
+    let old_score = 0;
+    let soundPlayer = document.getElementById('soundCoin');
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
@@ -303,6 +304,23 @@ class Game {
       }
       var score = 0;
       score += coinsHolder.coinsTouched;
+      if(score != old_score){
+        old_score = score
+
+        // player.currentTime =0;
+        soundPlayer.cloneNode().play();
+
+        // if(player.play()){
+        //   player.pause()
+        //   if(player.pause()){
+        //     player.currenTime = 0;
+        //     player.play();
+        //   }
+        // }
+
+
+      }
+
       this.score.innerHTML = score;
     };
     return coinsHolder;
