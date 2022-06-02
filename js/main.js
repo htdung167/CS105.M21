@@ -126,9 +126,19 @@ class Game {
 
     // speed
     this.speed = 0.002;
-    this.increaseSpeed = 0.00001;
+    this.increaseSpeed = 0.001;
     this.countLoop = 0;
 
+    this.score = document.getElementById("score");
+    this.can = document.getElementById("webglOutput");
+    // Add particles
+    // this.particlesHolder = this.createParticles(50);
+    // this.scene.add(this.particlesHolder.mesh);
+    // console.log(this.plane.updatePlane())
+    // loop
+    // this.loop();
+    // Resize
+    // this.checkCollisions();
     this.handleResize();
     //Render
     this.render(1);
@@ -138,7 +148,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
-    // scene.fog = new Fog(0xf7d9aa, 100, 950);
+    scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
