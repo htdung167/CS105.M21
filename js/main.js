@@ -116,7 +116,7 @@ class Game {
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
     // Add ennemy
-    this.ennemiesHolder = this.createEnnemy();
+    this.ennemiesHolder = this.createEnnemy(50);
     this.scene.add(this.ennemiesHolder.mesh);
     // Add coin test
     this.chaincoins = this.createCoin(500);
@@ -137,7 +137,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
-    scene.fog = new Fog(0xf7d9aa, 100, 950);
+    // scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
@@ -147,7 +147,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 200);
+    camera.position.set(0, 200, 150);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -230,14 +230,10 @@ class Game {
     return sea;
   }
 
-  createEnnemy() {
-    for (var i = 0; i < 10; i++) {
-      const ennemy = new Ennemy();
-      ennemiesPool.push(ennemy);
-    }
-    var nEnnemies = 50 // game level
-    const ennemiesHolder = new EnnemiesHolder(ennemiesPool, nEnnemies);
-    ennemiesHolder.spawnEnnemies();
+  createEnnemy(nEnnemies) {
+    // var nEnnemies = 50; // game level
+    const ennemiesHolder = new EnnemiesHolder(nEnnemies);
+    
     let delta_x = 0;
     let delta_y = -1000;
     let delta_z = -70;
@@ -247,11 +243,12 @@ class Game {
     ennemiesHolder.mesh.position.z = delta_z;
 
     ennemiesHolder.mesh.tick = (ms) => {
-      ennemiesHolder.mesh.rotation.z += 0.001;
-      ennemiesHolder.updateRotationZ(ms);
+      // ennemiesHolder.mesh.rotation.z += 0.001;
+      ennemiesHolder.RotationEnnemy();
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      // console.log(ennemiesHolder.coinsTouched);
+      // console.log(ennemiesHolder.ennemiesTouched);
     };
+    ennemiesHolder.spawnEnnemies();
     return ennemiesHolder;
   }
 
@@ -278,7 +275,7 @@ class Game {
       oldTime = newTime;
       // console.log(deltaTime);
       // console.log(coinsHolder.coinsPool.length)
-      let rand = Math.floor(Math.random() * 200);
+      let rand = Math.floor(Math.random() * 100);
       // console.log(rand);
 
       if (rand == 16 || rand == 7) {

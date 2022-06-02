@@ -5,75 +5,7 @@ import {
     Object3D,
     Group,
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
-// export class Stone{
-//     constructor() {
-//         this.geom = new TetrahedronGeometry(10, 2);
-//         this.mat = new MeshPhongMaterial({
-//           color: 0xa52a2a,
-//           shininess: 0,
-//           flatShading: true,
-//         });
-//         this.createStone(this.geom, this.mat);      
-//     }
-//     createStone(geom, mat) {
-//         //create stones
-//           this.mesh = new Group();
-//           let m = new Mesh(geom, mat);
-//           // m.position.x = 0;
-//           // m.position.y = Math.random() * 10;
-//           // m.position.z = Math.random() * 10;
-//           // m.rotation.z = Math.random() * Math.PI * 2;
-//           // m.rotation.y =  Math.random() * Math.PI * 2;
-//           m.position.x = 0;
-//           m.position.y = Math.random() * 10;
-//           // m.position.z = Math.random() * 10;
-//           m.position.z = 0;
-//           m.rotation.z = Math.random() * Math.PI * 2;
-//           m.rotation.y =  Math.random() * Math.PI * 2;
-//           // let s = 0.1 + Math.random() * 0.9;
-//           // m.scale.set(s, s, s);
-//           m.castShadow = true;
-//           m.receiveShadow = true;
-//           this.mesh.add(m);
-//         }
-    
-//     setPosition(x, y, z){
-//       this.mesh.position.x = x;
-//       this.mesh.position.y = y;
-//       this.mesh.position.z = z;
-//     }
-//   }
-// export class Ennemy {
-//     constructor(nEnnemys) {
-//         this.nEnnemys = nEnnemys;
-//         this.mesh = new Group();
-//         this.stepAngle = (Math.PI * 2) / this.nEnnemys; 
-//         this.createEnnemy(this.nEnnemys);
-//     }
-//     createEnnemy(nEnnemys) {
-//         //create ennemies
-//         for (let i = 0; i < nEnnemys; i++) {
-//           let stone = new Stone();
-//           let a = this.stepAngle * i;
-//           let h = 1200 - 50 + Math.random() * 50; // Khoảng cách từ tâm tới đám mây
-//           // Vị trí đám mây
-//           stone.setPosition(
-//             Math.cos(a) * h,
-//             Math.sin(a) * h + 100,
-//             // -400 - Math.random() * 400
-//             -70
-//             // -70
-//           );
-          
-//           this.mesh.add(stone.mesh);
-//         }
-//     }
-//     setPosition(x, y, z){
-//       this.mesh.position.x = x;
-//       this.mesh.position.y = y;
-//       this.mesh.position.z = z;
-//     }
-// }
+
 export class Ennemy {
   constructor() {
     this.geom = new TetrahedronGeometry(10, 2);
@@ -92,12 +24,17 @@ export class Ennemy {
   }
 }
 export class EnnemiesHolder {
-  constructor(ennemiesPool, nEnnemies) {
+  constructor(nEnnemies) {
     this.mesh = new Group();
     this.ennemiesInUse = [];
-    this.ennemiesPool = ennemiesPool;
+    this.ennemiesPool = [];
     this.nEnnemies = nEnnemies;
-    this.ennemyTouched = 0;
+    this.ennemiesTouched = 0;
+
+    for (let i = 0; i < this.nEnnemies; i++) {
+      let ennemy = new Ennemy();
+      this.ennemiesPool.push(ennemy);
+    }
   }
   spawnEnnemies() {
     for (let i = 0; i < this.nEnnemies; i++) {
@@ -107,40 +44,52 @@ export class EnnemiesHolder {
       } else {
         ennemy = new Ennemy();
       }
+      this.mesh.add(ennemy.mesh);
+
       ennemy.angle = -(i * 100);
       ennemy.dist = 1200 + Math.random() * 100;
       ennemy.mesh.position.y =
-        Math.sin(ennemy.angle) * ennemy.dist + Math.random() * -50;
+        Math.sin(ennemy.angle) * ennemy.dist;
       ennemy.mesh.position.x =
-        Math.cos(ennemy.angle) * ennemy.dist + Math.random() * 100;
-      ennemy.mesh.position.z = -70;
-      this.mesh.add(ennemy.mesh);
+        Math.cos(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.z = 0
+      
       this.ennemiesInUse.push(ennemy);
     }
   }
   touchPlane(obj, delta_pos) {
     for (let i = 0; i < this.ennemiesInUse.length; i++) {
       let ennemy = this.ennemiesInUse[i];
-      var diffPos = obj.mesh.position.clone().sub(ennemy.mesh.position.clone()).sub(delta_pos);
+      var diffPos = obj.mesh.position.clone().sub(ennemy.mesh.position.clone()).sub(delta_pos.clone());
       // console.log('plane:', obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z)
       // console.log('coin:',  coin.mesh.position.x, coin.mesh.position.y, coin.mesh.position.z)
       // console.log(diffPos.x, diffPos.y, diffPos.z)
       // console.log(diffPos);
       var d = diffPos.length();
       if (d < 20) {
-        this.ennemiesPool.unshift(this.enemiesInUse.splice(i, 1)[0]);
+        console.log('touched');
+        this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
         i--;
-        this.coinsTouched -= 1;
+        // this.ennemiesTouched += 1;
         // trừ 1 điểm
       }
 
-      this.is_touched = false;
+      // this.is_touched = false;
     }
   }
-  updateRotationZ(ms) {
-    for (var ennemy of this.ennemiesInUse) {
-      ennemy.updateRotationZ();
+  RotationEnnemy() {
+    for (let i = 0; i < this.ennemiesInUse.length; i++) {
+      let ennemy = this.ennemiesInUse[i];
+      ennemy.angle += 0.001;
+      if (ennemy.angle > Math.PI) {
+        this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
+        this.mesh.remove(ennemy.mesh);
+        i--;
+      }
+      ennemy.mesh.position.y  = Math.sin(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.rotation.y += 0.01 + (Math.random() * 2) / 10;
     }
   }
 }
