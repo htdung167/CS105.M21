@@ -28,8 +28,8 @@ export class EnnemiesHolder {
     this.mesh = new Group();
     this.ennemiesInUse = [];
     this.ennemiesPool = [];
-    this.nEnnemies = nEnnemies;
     this.ennemiesTouched = 0;
+    this.nEnnemies = nEnnemies;
 
     for (let i = 0; i < this.nEnnemies; i++) {
       let ennemy = new Ennemy();
@@ -48,26 +48,27 @@ export class EnnemiesHolder {
 
       ennemy.angle = -(i * 100);
       ennemy.dist = 1200 + Math.random() * 100;
-      ennemy.mesh.position.y =
-        Math.sin(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.x =
-        Math.cos(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.z = 0
-      
+      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.z = 0;
+
       this.ennemiesInUse.push(ennemy);
     }
   }
   touchPlane(obj, delta_pos) {
     for (let i = 0; i < this.ennemiesInUse.length; i++) {
       let ennemy = this.ennemiesInUse[i];
-      var diffPos = obj.mesh.position.clone().sub(ennemy.mesh.position.clone()).sub(delta_pos.clone());
+      var diffPos = obj.mesh.position
+        .clone()
+        .sub(ennemy.mesh.position.clone())
+        .sub(delta_pos.clone());
       // console.log('plane:', obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z)
       // console.log('coin:',  coin.mesh.position.x, coin.mesh.position.y, coin.mesh.position.z)
       // console.log(diffPos.x, diffPos.y, diffPos.z)
       // console.log(diffPos);
       var d = diffPos.length();
       if (d < 20) {
-        console.log('touched');
+        console.log("touched");
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
         i--;
@@ -87,7 +88,7 @@ export class EnnemiesHolder {
         this.mesh.remove(ennemy.mesh);
         i--;
       }
-      ennemy.mesh.position.y  = Math.sin(ennemy.angle) * ennemy.dist;
+      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
       ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
       ennemy.mesh.rotation.y += 0.01 + (Math.random() * 2) / 10;
     }

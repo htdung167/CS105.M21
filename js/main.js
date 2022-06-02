@@ -128,6 +128,7 @@ class Game {
     this.speed = 0.002;
     this.increaseSpeed = 0.001;
     this.countLoop = 0;
+    this.level = 1;
 
     this.score = document.getElementById("score");
     this.can = document.getElementById("webglOutput");
@@ -148,7 +149,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
-    scene.fog = new Fog(0xf7d9aa, 100, 950);
+    // scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
@@ -158,7 +159,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 150);
+    camera.position.set(0, 200, 1500);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -241,9 +242,9 @@ class Game {
     return sea;
   }
 
-  createEnnemy(nEnnemies) {
+  createEnnemy() {
     // var nEnnemies = 50; // game level
-    const ennemiesHolder = new EnnemiesHolder(nEnnemies);
+    const ennemiesHolder = new EnnemiesHolder(this.level * 10);
     
     let delta_x = 0;
     let delta_y = -1000;
@@ -258,8 +259,10 @@ class Game {
       ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
       this.score.innerHTML = ennemiesHolder.ennemiesTouched;
+       ennemiesHolder.spawnEnnemies();
     };
-    ennemiesHolder.spawnEnnemies();
+
+   
     return ennemiesHolder;
   }
   // createParticle(nParticles) {
@@ -312,6 +315,7 @@ class Game {
     this.countLoop += 1;
     if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
+      this.level += 1;
       // console.log(this.countLoop);
     }
     this.sky.mesh.tick();
