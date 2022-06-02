@@ -30,7 +30,7 @@ export class Cloud {
       // Tạo cloud material
       // this.cloudMaterial = new MeshPhongMaterial({color : Colors.white});
       this.cloudMaterial = new MeshPhongMaterial({
-        color: new Color(0xfaebd7),
+        color: new Color(0xcFFFFF),
         transparent: true,
       });
       // Số cube trong 1 đám mây

@@ -1,9 +1,17 @@
 body{
     margin: 0;
+    padding: 0;
+    
+
     overflow: hidden;
 }
 #webglOutput {
     background-color: #ccc;
     width: 100%;
     height: 100%;
+}
+#score {
+    text-align: center;
+    position: relative
+    
 }
