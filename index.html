@@ -1,57 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CS105</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div id="container">
+            <canvas id = "webglOutput">
+            </canvas>
+            <!-- <button id="play-audio" onclick="playAudio()" type="button">Play Audio</button>
+            <button id="stop-audio" onclick="pauseAudio()" type="button">Pause Audio</button> -->
+            <span id = "score_label">
+                <p id = "score_playing" class="score"></p>
+            </span>
+            
+        </div>
+        
+        <img src="./images/turnoff.png" alt="">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS105</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/style_button.scss">
-</head>
+        <div id="soundtrack">
+            <a href="#" onclick="onoffSound()">
+                <img id="mute" src="./images/turnoff.png" width="64" height="64">
+            </a>
+            <audio 
+            autoplay loop   
+            id="myAudio">
+            <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
+            <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
+            </audio>
+            <!-- <script>
+                document.getElementById('audio').play();
+            </script> -->
+        </div>
 
-<body>
-    <div id="container">
-        <canvas id="webglOutput">
-        </canvas>
-        <audio autoplay loop id="myAudio">
-        <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
-        <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-        </audio>
-        <button id="play-mute-audio" onclick="muteAudio()" type="button">play</button>
-        <!-- <button id="stop-audio" onclick="pauseAudio()" type="button">Pause Audio</button> -->
-        <!-- <h2>My mute speaker</h2>
-            <a href="#" class="speaker">
-            <span></span>
-            </a> -->
-        <!-- <a href="#" class="speaker">
-        <span id = "mute" onclick="muteAudio()"></span>
-        </a> -->
+        
+        
+        <!-- <audio id="soundCoin" src="./audio/coin_audio.mp3" preload="auto" autobuffer controls ></audio> -->
 
-        <span id="score_label">
-            <p id = "score">0</p>
-        </span>
-    </div>
-    
-    <script src="js/main.js" type="module"></script>
-    <script>
-        var x = document.getElementById("myAudio");
-        // console.log(x)
-        function muteAudio() {
-            var audio = document.getElementById("myAudio");
-            if (audio.muted == false) {
-                audio.play();
-                audio.muted = true;
-                // document.getElementById("play-audio").innerHTML = "Play Audio";
-            } else {
-                audio.muted = false;
-                // document.getElementById("play-audio").innerHTML = "Mute Audio";
+        <script src="js/main.js" type="module"></script>
+
+        <div id="game-over-container" style="display: none;">
+            <p id="score_gameover" class="score"></p>
+            <a href="#" id="play_icon">
+                <img src="./images/play.png" alt="">
+            </a>
+            <br>
+        </div>
+
+        <script>
+        var x = document.getElementById("myAudio"); 
+        // window.location.reload();
+        // x.play()
+        // document.documentElement.style.cursor = 'none';  
+
+        function onoffSound(){
+            if(x.paused){
+                x.play();
+                document.getElementById("mute").src = "./images/turnon.png";
+            }else{
+                x.pause();
+                document.getElementById("mute").src = "./images/turnoff.png";
             }
-
         }
-    </script>
-</body>
 
-</html>
-
+        // function playAudio() { 
+        // x.play(); 
+        // } 
+        // function pauseAudio() { 
+        // x.pause(); 
+        // } 
+        </script>
+    </body>
 </html>
