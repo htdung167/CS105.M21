@@ -22,48 +22,39 @@
             </a>
             <br>
         </div>
-
-        </div>
-        
-        <img src="./images/turnoff.png" alt="">
-
-        <div id="soundtrack">
+            <div id="soundtrack">
             <a href="#" onclick="onoffSound()">
-                <img id="mute" src="./images/turnon.png" width="64" height="64">
+                <img id="mute" src="./images/turnoff.png" width="64" height="64">
             </a>
             <audio 
-            autoplay loop   
+            loop   
             id="myAudio">
             <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
             <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
             </audio>
+            </div>
+        
+        <img src="./images/turnoff.png" alt="">
+
+        
             <!-- <script>
                 document.getElementById('audio').play();
             </script> -->
         </div>
-
         <script src="js/main.js" type="module"></script>
-        <div id="game-over-container" style="display: none;">
-            <p id="score_gameover" class="score"></p>
-            <a href="#" id="play_icon">
-                <img src="./images/play.png" alt="">
-            </a>
-            <br>
-        </div>
-
         <script>
         var x = document.getElementById("myAudio");
-
         // window.location.reload();
         // x.play()
         // document.documentElement.style.cursor = 'none';  
         function onoffSound(){
-            if(x.muted== false){
-                x.muted = true;
-                document.getElementById("mute").src = "./images/turnoff.png";
-            }else{
-                x.muted = false;
-                document.getElementById("mute").src = "./images/turnon.png";
+
+            if (x.pause) {
+                x.play();
+                document.getElementById('mute').src = './images/turnon.png';
+            } else {
+                x.pause();
+                document.getElementById('mute').src = './images/turnoff.png';
             }
         }
         </script>
