@@ -146,7 +146,7 @@ class Game {
     this.score = document.getElementById("score_playing");
     this.can = document.getElementById("webglOutput");
 
-    
+    document.getElementById('play_icon').click();
 
     // Add particles
     // this.particlesHolder = this.createParticles(50);
@@ -166,7 +166,7 @@ class Game {
         this.playingGame();
       }
     }, false)
-
+    // window.location.reload();
   }
 
   // Create Scene
