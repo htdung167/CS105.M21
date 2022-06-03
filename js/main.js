@@ -99,6 +99,8 @@ class Game {
   constructor(canvas) {
     //
     // speed
+    this.backgroundColor = 0xffcc99;
+    this.flagBright = true ;
     this.speed = 0.002;
     this.increaseSpeed = 0.001;
     this.countLoop = 0;
@@ -146,7 +148,7 @@ class Game {
   // Create Scene
   createScene() {
     const scene = new Scene();
-    scene.background = new Color(0xffcc99);
+    scene.background = this.backgroundColor;
     scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
@@ -325,12 +327,17 @@ class Game {
     if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
       console.log(this.countLoop);
+      if (this.flagBright) {
+        this.flagBright = false;
+        this.scene.fog.color.setHSL(0, 0, 0.1);
+      }
+        this.flagBright = false;
+      }
        this.level += 1;
        console.log("level: " + this.level);
+
     }
-    else if(this.countLoop % 2000 == 0){
-     
-    }
+
 
     this.sky.mesh.tick();
     this.sea.mesh.tick();
