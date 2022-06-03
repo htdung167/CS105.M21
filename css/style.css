@@ -13,15 +13,6 @@ body {
     overflow: hidden;
 }
 
-#stop-audio {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100px;
-    overflow: hidden;
-    font-family: 'Kelly Slab', cursive;
-}
-
 #play-mute-audio {
     position: absolute;
     top: 0;
@@ -45,36 +36,5 @@ body {
     width: 100%;
     height: 100%;
 }
-#score_playing {
-    text-align: center;
-    position: relative;
-    font-family: 'Kelly Slab', cursive;
-    font-size: 20px;
-    /* white-space: nowrap; */
-}
 
-#soundtrack{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* overflow: hidden; */
-}
-
-#game-over-container{
-    position: absolute;
-    text-align: center;
-    top: 30%;
-    /* left: 100%; */
-    width: 100%;
-    height: 100%;
-}
-#score_gameover {
-    /* text-align: center; */
-    position: relative;
-    font-family: 'Kelly Slab', cursive;
-    font-size: 30px;
-}
-@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
 

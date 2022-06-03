@@ -12,9 +12,6 @@ import {
   MeshPhongMaterial,
   BoxBufferGeometry,
   Group,
-  AudioLoader,
-  AudioListener,
-  Audio
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
@@ -97,7 +94,6 @@ var game = {
       status: "playing",
 };
 
-var status = 'playing';
 
 class Game {
   constructor(canvas) {
@@ -132,26 +128,8 @@ class Game {
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
 
-    // score
-    // this.score = 0;
-
-    // speed
-    this.initSpeed = 0.001;
-    this.speed = 0.001;
-    this.increaseSpeed = 0.001;
-    this.countLoop = 1;
-    this.level = 1;
-
-    // game status
-    this.status = 'playing'
-    // this.status = 'gameover'
-    this.oldScoreValue = 0;
-    this.scoreValue = 0;
-    this.score = document.getElementById("score_playing");
+    this.score = document.getElementById("score");
     this.can = document.getElementById("webglOutput");
-
-    document.getElementById('play_icon').click();
-
     // Add particles
     // this.particlesHolder = this.createParticles(50);
     // this.scene.add(this.particlesHolder.mesh);
@@ -163,14 +141,6 @@ class Game {
     this.handleResize();
     //Render
     this.render(1);
-
-    // Xử lý replay game
-    document.addEventListener('mousedown', () => {
-      if(this.status==='gameover'){
-        this.playingGame();
-      }
-    }, false)
-    // window.location.reload();
   }
 
   // Create Scene
@@ -213,6 +183,13 @@ class Game {
     return light;
   }
 
+  // createCube() {
+  //   const cubeGeometry = new BoxGeometry(6, 6, 6);
+  //   const cubeMaterial = new MeshNormalMaterial();
+  //   const cube = new Mesh(cubeGeometry, cubeMaterial);
+  //   cube.position.set(-4, 3, 0);
+  //   return cube;
+  // }
 
   //Create Plane
   createPlane(canvas) {
@@ -241,14 +218,14 @@ class Game {
 
     return plane;
   }
-
   // Create Sky
   createSky(nClouds) {
     const sky = new Sky(nClouds);
-    sky.setPosition(0, -1050, -100);
+    sky.setPosition(0, -1000, -100);
     sky.mesh.tick = () => {
-      sky.updateRotation(this.speed);
+    sky.updateRotationZ(this.speed);
     };
+    // console.log("Sky", sky.mesh.position.x, sky.mesh.position.y);
     return sky;
   }
 
@@ -259,6 +236,7 @@ class Game {
     sea.mesh.tick = (ms) => {
       sea.mesh.rotation.z += this.speed;
     };
+    // console.log("Sea", sea.mesh.position.x, sea.mesh.position.y);
     return sea;
   }
 
@@ -291,28 +269,6 @@ class Game {
          ennemiesHolder.spawnEnnemies(this.level);
       }
        
-      // this.score.innerHTML = ennemiesHolder.ennemiesTouched;
-      // Tiếng va chạm
-      let audioLoader = new AudioLoader();
-      let listener = new AudioListener();
-      let audio = new Audio(listener);
-      let stream = "./sound/crash.mp3"
-      if(ennemiesHolder.ennemiesTouched){
-        if (audio.isPlaying) {
-          audio.stop();
-        }
-        // Tiếng va chạm
-        audioLoader.load(stream, function(buffer) {
-          audio.setBuffer(buffer);
-          audio.setLoop(false);
-          audio.play();
-        });
-
-        this.status='gameover';
-        this.score.style.display = "none";
-        document.getElementById('game-over-container').style.display='block';
-        
-      }
     };
     
     // ennemiesHolder.spawnEnnemies(1);
@@ -335,84 +291,42 @@ class Game {
     coinsHolder.mesh.position.x = delta_x;
     coinsHolder.mesh.position.y = delta_y;
     coinsHolder.mesh.position.z = delta_z;
-
-    // Thêm nhạc khi chạm
-    let audioLoader = new AudioLoader();
-    let listener = new AudioListener();
-    let audio = new Audio(listener);
-    let stream = "./sound/coin_audio.mp3"
+    let i = 0;
+    let oldTime = 0;
+    let newTime = 0;
     
-
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
+      // console.log(coinsHolder.coinsTouched);
+      // console.log(this.plane.mesh.position)
+      newTime = new Date().getTime();
+      let deltaTime = newTime - oldTime;
+      oldTime = newTime;
+      // console.log(deltaTime);
+      // console.log(coinsHolder.coinsPool.length)
       let rand = Math.floor(Math.random() * 100);
+      // console.log(rand);
+
       if (rand == 16 || rand == 7) {
+        // console.log("Pool:", coinsHolder.coinsPool.length);
+        // console.log("InUse:", coinsHolder.coinsInUse.length);
         coinsHolder.spawnCoins();
       }
-      this.scoreValue = coinsHolder.coinsTouched;
-      this.score.innerHTML = "Score: " + this.scoreValue + " Level: " + this.level;
-
-      // Thêm nhạc khi va chạm 
-      if(this.status === 'playing'){
-        if(this.scoreValue != this.oldScoreValue && this.scoreValue != 0){
-          this.oldScoreValue = this.scoreValue
-          if(audio.isPlaying){
-            audio.stop();
-          }
-          audioLoader.load(stream, function(buffer) {
-            audio.setBuffer(buffer);
-            audio.setLoop(false);
-            audio.play();
-          });
-        }
-      }
+      var score = 0;
+      score += coinsHolder.coinsTouched;
+      this.score.innerHTML = score;
     };
     return coinsHolder;
   }
 
-  // Hàm check nếu game over set lại các tham số
-  checkGameOver(){
-    if(this.status==='gameover'){
-      document.getElementById("score_gameover").innerHTML = "Score: " + this.oldScoreValue; // Set score cuối cùng
-      this.speed=this.initSpeed; // Đặt lại speed như ban đầu
-      this.chaincoins.coinsTouched = 0; // Set số coin đã chạm về 0
-      this.scoreValue = 0; // Set score về 0
-      this.countLoop = 0;
-      this.level = 1;
-      this.ennemiesHolder.ennemiesTouched = false; // Set lại ennemiesTouched = false (chưa chạm)
-
-      // this.score
-      //Add hàm rơi máy bay ở đây
-
-
-
-      // Cho plane ở vị trí cố định (góc never die)
-      this.plane.mesh.position.x = -160;
-      this.plane.mesh.position.y = 150;
-      this.plane.mesh.position.z = -70;
-    }
-    // console.log(this.speed)
-  }
-
-  // Khi listen thấy mouse up thì gọi hàm này, set lại các tham số
-  playingGame(){
-    this.status = 'playing' // Trả lại trạng thái playing
-    document.getElementById('game-over-container').style.display = 'none'; // Ẩn button play
-    this.score.style.display='block' // Hiển thị lại score
-  }
-
   update(ms) {
-    this.checkGameOver();
     this.countLoop += 1;
-    console.log(this.speed);
     if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
-      this.level += 1;
-      // Thêm hàm tăng số đá ở đây
-
-
-      // console.log(this.countLoop);
+      console.log(this.countLoop);
+       this.level += 1;
+       console.log("level: " + this.level);
     }
     else if(this.countLoop % 2000 == 0){
      

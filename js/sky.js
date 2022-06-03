@@ -70,7 +70,7 @@ export class Cloud {
       this.mesh.position.z = z;
     }
 
-    updateRotation(){
+    updateRotationZ(){
       for(let i = 0; i < this.listUse.length; i++){
         let aCloud = this.listUse[i];
         aCloud.rotation.x += Math.random()*0.03;
@@ -118,11 +118,11 @@ export class Sky {
     this.mesh.position.z = z;
   }
 
-  updateRotation(speed){
+  updateRotationZ(speed){
     this.mesh.rotation.z += speed ;
     for(let i = 0; i < this.listUse.length; i++){
       let clouds = this.listUse[i];
-      clouds.updateRotation();
+      clouds.updateRotationZ();
     }
   }
 }
