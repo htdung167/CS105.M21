@@ -97,6 +97,7 @@ var game = {
       status: "playing",
 };
 
+var status = 'playing';
 
 class Game {
   constructor(canvas) {
@@ -127,13 +128,26 @@ class Game {
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
 
-    // speed
-    this.speed = 0.002;
-    this.increaseSpeed = 0.0001;
-    this.countLoop = 1;
+    // score
+    // this.score = 0;
 
-    this.score = document.getElementById("score");
+    // speed
+    this.initSpeed = 0.001;
+    this.speed = 0.001;
+    this.increaseSpeed = 0.001;
+    this.countLoop = 1;
+    this.level = 1;
+
+    // game status
+    this.status = 'playing'
+    // this.status = 'gameover'
+    this.oldScoreValue = 0;
+    this.scoreValue = 0;
+    this.score = document.getElementById("score_playing");
     this.can = document.getElementById("webglOutput");
+
+    
+
     // Add particles
     // this.particlesHolder = this.createParticles(50);
     // this.scene.add(this.particlesHolder.mesh);
@@ -145,6 +159,14 @@ class Game {
     this.handleResize();
     //Render
     this.render(1);
+
+    // Xử lý replay game
+    document.addEventListener('mousedown', () => {
+      if(this.status==='gameover'){
+        this.playingGame();
+      }
+    }, false)
+
   }
 
   // Create Scene
@@ -252,7 +274,25 @@ class Game {
       // ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      this.score.innerHTML = ennemiesHolder.ennemiesTouched;
+      // this.score.innerHTML = ennemiesHolder.ennemiesTouched;
+      // Tiếng va chạm
+      let audioLoader = new AudioLoader();
+      let listener = new AudioListener();
+      let audio = new Audio(listener);
+      let stream = "./sound/crash.mp3"
+      if(ennemiesHolder.ennemiesTouched){
+        // Tiếng va chạm
+        audioLoader.load(stream, function(buffer) {
+          audio.setBuffer(buffer);
+          audio.setLoop(false);
+          audio.play();
+        });
+
+        this.status='gameover';
+        this.score.style.display = "none";
+        document.getElementById('game-over-container').style.display='block';
+        
+      }
     };
     ennemiesHolder.spawnEnnemies();
     return ennemiesHolder;
@@ -274,56 +314,83 @@ class Game {
     coinsHolder.mesh.position.x = delta_x;
     coinsHolder.mesh.position.y = delta_y;
     coinsHolder.mesh.position.z = delta_z;
-    let i = 0;
-    let oldTime = 0;
-    let newTime = 0;
-    let old_score = 0;
 
     // Thêm nhạc khi chạm
-    var audioLoader = new AudioLoader();
-    var listener = new AudioListener();
-    var audio = new Audio(listener);
-    var stream = "./sound/coin_audio.mp3"
+    let audioLoader = new AudioLoader();
+    let listener = new AudioListener();
+    let audio = new Audio(listener);
+    let stream = "./sound/coin_audio.mp3"
     
 
     coinsHolder.mesh.tick = (ms) => {
       coinsHolder.rotationCoins(this.speed);
       coinsHolder.touchPlane(this.plane, delta_pos);
-      // newTime = new Date().getTime();
-      // let deltaTime = newTime - oldTime;
-      // oldTime = newTime;
-
       let rand = Math.floor(Math.random() * 100);
-      // console.log(rand);
-
       if (rand == 16 || rand == 7) {
         coinsHolder.spawnCoins();
       }
-      var score = 0;
-      score += coinsHolder.coinsTouched;
-      this.score.innerHTML = "Score: " + score;
+      this.scoreValue = coinsHolder.coinsTouched;
+      this.score.innerHTML = "Score: " + this.scoreValue + " Level: " + this.level;
 
       // Thêm nhạc khi va chạm 
-      if(score != old_score){
-        old_score = score
-        if(audio.isPlaying){
-          audio.stop();
+      if(this.status === 'playing'){
+        if(this.scoreValue != this.oldScoreValue && this.scoreValue != 0){
+          this.oldScoreValue = this.scoreValue
+          if(audio.isPlaying){
+            audio.stop();
+          }
+          audioLoader.load(stream, function(buffer) {
+            audio.setBuffer(buffer);
+            audio.setLoop(false);
+            audio.play();
+          });
         }
-        audioLoader.load(stream, function(buffer) {
-          audio.setBuffer(buffer);
-          audio.setLoop(false);
-          audio.play();
-        });
       }
-
     };
     return coinsHolder;
   }
 
+  // Hàm check nếu game over set lại các tham số
+  checkGameOver(){
+    if(this.status==='gameover'){
+      document.getElementById("score_gameover").innerHTML = "Score: " + this.oldScoreValue; // Set score cuối cùng
+      this.speed=this.initSpeed; // Đặt lại speed như ban đầu
+      this.chaincoins.coinsTouched = 0; // Set số coin đã chạm về 0
+      this.scoreValue = 0; // Set score về 0
+      this.countLoop = 0;
+      this.level = 1;
+      this.ennemiesHolder.ennemiesTouched = false; // Set lại ennemiesTouched = false (chưa chạm)
+
+      // this.score
+      //Add hàm rơi máy bay ở đây
+
+
+
+      // Cho plane ở vị trí cố định (góc never die)
+      this.plane.mesh.position.x = -160;
+      this.plane.mesh.position.y = 150;
+      this.plane.mesh.position.z = -70;
+    }
+    // console.log(this.speed)
+  }
+
+  // Khi listen thấy mouse up thì gọi hàm này, set lại các tham số
+  playingGame(){
+    this.status = 'playing' // Trả lại trạng thái playing
+    document.getElementById('game-over-container').style.display = 'none'; // Ẩn button play
+    this.score.style.display='block' // Hiển thị lại score
+  }
+
   update(ms) {
+    this.checkGameOver();
     this.countLoop += 1;
+    console.log(this.speed);
     if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
+      this.level += 1;
+      // Thêm hàm tăng số đá ở đây
+
+
       // console.log(this.countLoop);
     }
     this.sky.mesh.tick();
