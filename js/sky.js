@@ -25,6 +25,7 @@ export class Cloud {
     constructor(){
       // Tạo Group rỗng
       this.mesh = new Group();
+      this.listUse = [];
       // Tạo cloud geometry
       this.cloudGeometry = new BoxBufferGeometry(20, 20, 20);
       // Tạo cloud material
@@ -50,7 +51,7 @@ export class Cloud {
         m.rotation.y =  Math.random() * Math.PI * 2;
   
         //Set size cho cube
-        let s = 0.1 + Math.random() * 0.9;
+        let s = 0.1 + Math.random() * 1.7;
         m.scale.set(s, s, s);
   
         // Đổ bóng
@@ -59,6 +60,7 @@ export class Cloud {
   
         // Thêm cube vào group
         this.mesh.add(m);
+        this.listUse.push(m);
       }
     }
 
@@ -67,6 +69,16 @@ export class Cloud {
       this.mesh.position.y = y;
       this.mesh.position.z = z;
     }
+
+    updateRotation(){
+      for(let i = 0; i < this.listUse.length; i++){
+        let aCloud = this.listUse[i];
+        aCloud.rotation.x += Math.random()*0.03;
+        // aCloud.rotation.y += 0.01;
+        aCloud.rotation.z += Math.random()*0.03;
+
+      }
+    }
   }
   
 // Class Sky
@@ -74,6 +86,7 @@ export class Sky {
   constructor(nClouds){
     this.mesh = new Group();
     this.nClouds = nClouds; // Số lượng mây
+    this.listUse = [];
 
     // Rải các đám mây trên trời theo góc bằng nhau
     this.stepAngle = Math.PI * 2 / this.nClouds; 
@@ -94,8 +107,10 @@ export class Sky {
       let s = 0.5 + Math.random() * 2;
       cloud.mesh.scale.set(s, s, s);
       this.mesh.add(cloud.mesh);
+      this.listUse.push(cloud);
     }
   }
+
 
   setPosition(x, y, z){
     this.mesh.position.x = x;
@@ -103,9 +118,12 @@ export class Sky {
     this.mesh.position.z = z;
   }
 
-  updateRotationZ(speed){
+  updateRotation(speed){
     this.mesh.rotation.z += speed ;
-    // this.mesh.angle += 0.001;
+    for(let i = 0; i < this.listUse.length; i++){
+      let clouds = this.listUse[i];
+      clouds.updateRotation();
+    }
   }
 }
 

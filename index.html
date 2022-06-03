@@ -1,50 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CS105</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div id="container">
+            <canvas id = "webglOutput">
+            </canvas>
+            <!-- <button id="play-audio" onclick="playAudio()" type="button">Play Audio</button>
+            <button id="stop-audio" onclick="pauseAudio()" type="button">Pause Audio</button> -->
+            <span id = "score_label">
+                <p id = "score_playing" class="score"></p>
+            </span>
+            <div id="game-over-container" style="display: none;">
+            <p id="score_gameover" class="score"></p>
+            <a href="#" id="play_icon">
+                <img src="./images/play.png" alt="">
+            </a>
+            <br>
+        </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS105</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/style_button.scss"> -->
-</head>
+        </div>
+        
+        <img src="./images/turnoff.png" alt="">
 
-<body>
-    <div id="container">
-        <canvas id="webglOutput">
-        </canvas>
-        <audio loop id="myAudio">
-        <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
-        <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-        </audio>
-        playAudio()
-        <button id="play-mute-audio" onclick="muteAudio()" type="button">Play Audio</button>
+        <div id="soundtrack">
+            <a href="#" onclick="onoffSound()">
+                <img id="mute" src="./images/turnon.png" width="64" height="64">
+            </a>
+            <audio 
+            autoplay loop   
+            id="myAudio">
+            <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
+            <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
+            </audio>
+            <!-- <script>
+                document.getElementById('audio').play();
+            </script> -->
+        </div>
 
+        <script src="js/main.js" type="module"></script>
+        <div id="game-over-container" style="display: none;">
+            <p id="score_gameover" class="score"></p>
+            <a href="#" id="play_icon">
+                <img src="./images/play.png" alt="">
+            </a>
+            <br>
+        </div>
 
-        <span id="score_label">
-            <p id = "score">0</p>
-        </span>
-    </div>
-    <script src="js/main.js" type="module"></script>
-    <script id="play_mute">
+        <script>
         var x = document.getElementById("myAudio");
-        function muteAudio() {
-            var audio = document.getElementById("myAudio");
-            if (audio.muted == false) {
-                audio.play();
-                audio.muted = true;
-                document.getElementById("play-mute-audio").innerHTML = "Play Audio";
-            } else {
-                audio.muted = false;
-                document.getElementById("play-mute-audio").innerHTML = "Mute Audio";
+
+        // window.location.reload();
+        // x.play()
+        // document.documentElement.style.cursor = 'none';  
+        function onoffSound(){
+            if(x.muted== false){
+                x.muted = true;
+                document.getElementById("mute").src = "./images/turnoff.png";
+            }else{
+                x.muted = false;
+                document.getElementById("mute").src = "./images/turnon.png";
             }
-
         }
-    </script>
-
-</body>
-
-</html>
-
+        </script>
+    </body>
 </html>

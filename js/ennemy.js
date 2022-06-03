@@ -28,8 +28,8 @@ export class EnnemiesHolder {
     this.mesh = new Group();
     this.ennemiesInUse = [];
     this.ennemiesPool = [];
-    this.ennemiesTouched = 0;
     this.nEnnemies = nEnnemies;
+    this.ennemiesTouched = false;
 
     for (let i = 0; i < this.nEnnemies; i++) {
       let ennemy = new Ennemy();
@@ -79,6 +79,7 @@ export class EnnemiesHolder {
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
         i--;
+        this.ennemiesTouched = true;
         // this.ennemiesTouched += 1;
         // trừ 1 điểm
       }

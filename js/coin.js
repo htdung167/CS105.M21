@@ -10,7 +10,10 @@ import {
     MeshPhongMaterial,
     BoxBufferGeometry,
     Group,
-    TorusGeometry
+    TorusGeometry,
+    AudioLoader,
+    AudioListener,
+    Audio
   } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
 export class ChainCoin {
@@ -25,9 +28,10 @@ export class ChainCoin {
             this.coinsPool.push(coin);
         }
 
-
-        // this.nCoins = 1 + Math.floor(Math.random() * 10);
-        // this.createChainCoin(this.nCoins);
+        // // coin sound
+        // this.audioLoader = new AudioLoader();
+        // this.listener = new AudioListener();
+        // this.audio = new Audio(this.listener);
     }
 
     spawnCoins(){
@@ -82,11 +86,18 @@ export class ChainCoin {
                 this.coinsPool.unshift(this.coinsInUse.splice(i, 1)[0]);
                 this.mesh.remove(coin.mesh);
                 i--;
-                this.coinsTouched += 1;
                 // CỘng điểm
+                this.coinsTouched += 1;
+                // let faudio = "./audio/coin_audio.mp3"
+                // var audio = new Audio(faudio);
+                // audio.play();
+                // // this.audioLoader.load(faudio, function(buffer){
+                //     this.audio.setBuffer(buffer);
+                //     this.audio.setLoop(true);
+                //     this.audio.play();
+                // });
             }
 
-            this.is_touched = false;
             
         }
         
