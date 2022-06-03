@@ -22,7 +22,7 @@ import { Light } from "./light.js";
 import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
 import { ParticlesHolder, Particle } from "./particles.js";
-var ennemiesPool = [];
+// var ennemiesPool = [];
 var Colors = {
   red: 0xf25346,
   white: 0xd8d0d1,
@@ -98,7 +98,11 @@ var game = {
 class Game {
   constructor(canvas) {
     //
-    
+    // speed
+    this.speed = 0.002;
+    this.increaseSpeed = 0.001;
+    this.countLoop = 0;
+    this.level = 1;
     this.width = canvas.clientWidth;
     this.height = canvas.clientHeight;
     this.scene = this.createScene();
@@ -118,20 +122,16 @@ class Game {
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
     // Add ennemy
-    this.ennemiesHolder = this.createEnnemy(50);
+    this.ennemiesHolder = this.createEnnemy();
     this.scene.add(this.ennemiesHolder.mesh);
     // Add coin test
     this.chaincoins = this.createCoin(500);
     this.scene.add(this.chaincoins.mesh);
 
-    // speed
-    this.speed = 0.002;
-    this.increaseSpeed = 0.001;
-    this.countLoop = 0;
-    this.level = 1;
-
     this.score = document.getElementById("score");
     this.can = document.getElementById("webglOutput");
+    // this.audio = document.getElementById("myAudio");
+    // this.audio.play();
     // Add particles
     // this.particlesHolder = this.createParticles(50);
     // this.scene.add(this.particlesHolder.mesh);
@@ -149,7 +149,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
-    // scene.fog = new Fog(0xf7d9aa, 100, 950);
+    scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
@@ -159,7 +159,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 1500);
+    camera.position.set(0, 200, 150);
     // camera.position.set(0, 200, 200);
 
     return camera;
@@ -243,11 +243,10 @@ class Game {
   }
 
   createEnnemy() {
-    // var nEnnemies = 50; // game level
-    const ennemiesHolder = new EnnemiesHolder(this.level * 10);
+    const ennemiesHolder = new EnnemiesHolder(10);
     
     let delta_x = 0;
-    let delta_y = -1000;
+    let delta_y = -1000;  
     let delta_z = -70;
     let delta_pos = new Vector3(delta_x, delta_y, delta_z);
     ennemiesHolder.mesh.position.x = delta_x;
@@ -258,11 +257,23 @@ class Game {
       // ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      this.score.innerHTML = ennemiesHolder.ennemiesTouched;
-       ennemiesHolder.spawnEnnemies();
-    };
+      ennemiesHolder.touchPlane(this.sea, delta_pos);
+      // newTime = new Date().getTime();
+      // let deltaTime = newTime - oldTime;
+      // oldTime = newTime;
+      // console.log(ra
+      let rand = Math.floor(Math.random() * 200);
+      // console.log(rand);
 
-   
+      if (rand == 2 || rand == 76) {
+        // console.log("Pool:", coinsHolder.coinsPool.length);
+        // console.log("InUse:", coinsHolder.coinsInUse.length);
+         ennemiesHolder.spawnEnnemies(this.level);
+      }
+       
+    };
+    
+    // ennemiesHolder.spawnEnnemies(1);
     return ennemiesHolder;
   }
   // createParticle(nParticles) {
@@ -315,9 +326,14 @@ class Game {
     this.countLoop += 1;
     if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
-      this.level += 1;
-      // console.log(this.countLoop);
+      console.log(this.countLoop);
+       this.level += 1;
+       console.log("level: " + this.level);
     }
+    else if(this.countLoop % 2000 == 0){
+     
+    }
+
     this.sky.mesh.tick();
     this.sea.mesh.tick();
     this.ennemiesHolder.mesh.tick();

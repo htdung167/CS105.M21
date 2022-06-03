@@ -32,9 +32,9 @@ export class ChainCoin {
 
     spawnCoins(){
         let nCoins = 1 + Math.floor(Math.random() * 10);
-        let heightSea = 1200;
-        let hCoins = heightSea + 100  + 50 * Math.random(); // 1200 - 1300
-        let amplitude = 10 + Math.round(Math.random() * 10);
+                let heightSea = 1200;
+                let hCoins = heightSea + 100  + 50 * Math.random(); // 1200 - 1300
+                let amplitude = 10 + Math.round(Math.random() * 10);
         for(let i = 0; i < nCoins; i++){
             var coin;
             if(this.coinsPool.length){

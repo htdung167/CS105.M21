@@ -19,9 +19,9 @@ export class Ennemy {
     this.angle = 0;
     this.dist = 0;
   }
-  updateRotationZ() {
-    this.mesh.rotation.z += 0.1;
-  }
+  // updateRotationZ() {
+  //   this.mesh.rotation.z += 0.1;
+  // }
 }
 export class EnnemiesHolder {
   constructor(nEnnemies) {
@@ -36,8 +36,11 @@ export class EnnemiesHolder {
       this.ennemiesPool.push(ennemy);
     }
   }
-  spawnEnnemies() {
-    for (let i = 0; i < this.nEnnemies; i++) {
+  spawnEnnemies(level) {
+    console.log("spawnEnnemies: " + level);
+    let hSea = 1160;
+    let amplitude = 80 - Math.round(Math.random() * 10);
+    for (let i = 0; i < level; i++) {
       var ennemy;
       if (this.ennemiesPool.length > 0) {
         ennemy = this.ennemiesPool.pop();
@@ -46,13 +49,17 @@ export class EnnemiesHolder {
       }
       this.mesh.add(ennemy.mesh);
 
-      ennemy.angle = -(i * 100);
-      ennemy.dist = 1200 + Math.random() * 100;
-      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.z = 0;
-
+      ennemy.angle = -(i * 0.01);
+      ennemy.dist = hSea + Math.random()*10  * (amplitude);
+      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist ;
+      console.log("pos y: " + ennemy.mesh.position.y);
+      ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist 
+      // ennemy.mesh.position.z = -70;
+      // if (ennemy.mesh.position.y > 45) {
+      //   ennemy.mesh.position.y = 45;
+      // }
       this.ennemiesInUse.push(ennemy);
+      
     }
   }
   touchPlane(obj, delta_pos) {
@@ -67,7 +74,7 @@ export class EnnemiesHolder {
       // console.log(diffPos.x, diffPos.y, diffPos.z)
       // console.log(diffPos);
       var d = diffPos.length();
-      if (d < 20) {
+      if (d < 10) {
         console.log("touched");
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
@@ -75,22 +82,29 @@ export class EnnemiesHolder {
         // this.ennemiesTouched += 1;
         // trừ 1 điểm
       }
-
+      else if (ennemy.angle > Math.PI){
+      this.ennemiesPool.unshift(this.ennemiesInUse.splice(i,1)[0]);
+      this.mesh.remove(ennemy.mesh);
+      i--;
       // this.is_touched = false;
     }
   }
+}
+ 
   RotationEnnemy(speed) {
     for (let i = 0; i < this.ennemiesInUse.length; i++) {
       let ennemy = this.ennemiesInUse[i];
       ennemy.angle += speed;
       if (ennemy.angle > Math.PI) {
+        ennemy.angle = -Math.PI;
         this.ennemiesPool.unshift(this.ennemiesInUse.splice(i, 1)[0]);
         this.mesh.remove(ennemy.mesh);
         i--;
       }
       ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
       ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.rotation.y += 0.01 + (Math.random() * 2) / 10;
+      ennemy.mesh.rotation.y +=  Math.random() * 0.1
+      ennemy.mesh.rotation.x +=  Math.random() * 0.1
     }
   }
 }

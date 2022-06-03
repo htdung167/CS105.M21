@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CS105</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body>
-        <div id="container">
-        <canvas id = "webglOutput">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS105</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="stylesheet" href="css/style_button.scss"> -->
+</head>
+
+<body>
+    <div id="container">
+        <canvas id="webglOutput">
         </canvas>
-        <button id="play-audio" onclick="playAudio()" type="button">Play Audio</button>
-        <button id="stop-audio" onclick="pauseAudio()" type="button">Pause Audio</button>
-        <span id = "score_label">
-            <p id = "score">0</p>
-        </span>
-        </div>
-        <script src="js/main.js" type="module"></script>
-        
-        <audio 
-        autoplay loop   
-        id="myAudio">
+        <audio loop id="myAudio">
         <source src="sound/AnyConv.com__01_To_Japan.ogg" type="audio/ogg">
         <source src="sound/AnyConv.com__01_To_Japan.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
         </audio>
+        playAudio()
+        <button id="play-mute-audio" onclick="muteAudio()" type="button">Play Audio</button>
 
-        <script>
-        var x = document.getElementById("myAudio"); 
 
-        function playAudio() { 
-        x.play(); 
-        } 
-        function pauseAudio() { 
-        x.pause(); 
-        } 
-        </script>
-    </body>
+        <span id="score_label">
+            <p id = "score">0</p>
+        </span>
+    </div>
+    <script src="js/main.js" type="module"></script>
+    <script id="play_mute">
+        var x = document.getElementById("myAudio");
+        function muteAudio() {
+            var audio = document.getElementById("myAudio");
+            if (audio.muted == false) {
+                audio.play();
+                audio.muted = true;
+                document.getElementById("play-mute-audio").innerHTML = "Play Audio";
+            } else {
+                audio.muted = false;
+                document.getElementById("play-mute-audio").innerHTML = "Mute Audio";
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
+
 </html>
