@@ -41,12 +41,12 @@ export class ChainCoin {
                 let amplitude = 10 + Math.round(Math.random() * 10);
         for(let i = 0; i < nCoins; i++){
             var coin;
-            // if(this.coinsPool.length){
-            //     coin = this.coinsPool.pop();
-            // }else{
-            //     coin = new Coin();
-            // }
-            coin = new Coin();
+            if(this.coinsPool.length){
+                coin = this.coinsPool.pop();
+            }else{
+                coin = new Coin();
+            }
+            // coin = new Coin();
             this.mesh.add(coin.mesh);   
             coin.angle = -(i * 0.02)
             coin.dist = hCoins + Math.cos(i*0.5)*amplitude;

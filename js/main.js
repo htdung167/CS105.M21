@@ -15,7 +15,8 @@ import {
   Group,
   AudioLoader,
   AudioListener,
-  Audio
+  Audio,
+  CameraHelper
   // requestAnimationFrame
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
@@ -124,6 +125,7 @@ class Game {
     this.scene.add(this.light.shadowLight);
     // this.scene.add(this.light.helperShadowLight);
     // this.scene.add(this.light.helperShadowCamera);
+    // this.scene.add(new CameraHelper(this.light.shadowLight.shadow.camera))
     // Add ennemy
     this.ennemiesHolder = this.createEnnemy(50);
     this.scene.add(this.ennemiesHolder.mesh);
@@ -188,6 +190,7 @@ class Game {
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
     camera.position.set(0, 200, 150);
     // camera.position.set(0, 200, 200);
+
 
     return camera;
   }
