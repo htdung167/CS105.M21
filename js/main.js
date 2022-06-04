@@ -25,7 +25,7 @@ import { Sea } from "./sea.js ";
 import { Light } from "./light.js";
 import { Ennemy, EnnemiesHolder } from "./ennemy.js";
 import { ChainCoin } from "./coin.js";
-import { ParticlesHolder, Particle } from "./particles.js";
+// import { ParticlesHolder, Particle } from "./particles.js";
 var ennemiesPool = [];
 var Colors = {
   red: 0xf25346,
