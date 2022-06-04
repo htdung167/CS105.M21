@@ -49,7 +49,7 @@ export class EnnemiesHolder {
       }
       this.mesh.add(ennemy.mesh);
 
-      ennemy.angle = -(i * 0.1);
+      ennemy.angle = 1 - (i * 0.1);
       ennemy.dist = hSea + ( Math.random() * 2) * (amplitude-20);
       ennemy.mesh.position.y =  100 + Math.sin(ennemy.angle) * ennemy.dist ;
       console.log("pos y: " + ennemy.mesh.position.y);

@@ -294,9 +294,8 @@ class Game {
           audio.setBuffer(buffer);
           audio.setLoop(false);
           audio.play();
-          this.level = 1;
         });
-
+        this.level = 1;
         this.status='gameover';
         this.score.style.display = "none";
         document.getElementById('game-over-container').style.display='block';
@@ -377,7 +376,7 @@ class Game {
 
       // Cho plane ở vị trí cố định (góc never die)
       this.plane.mesh.position.x = -160;
-      this.plane.mesh.position.y = 150;
+      this.plane.mesh.position.y = 300;
       this.plane.mesh.position.z = -70;
     }
     // console.log(this.speed)

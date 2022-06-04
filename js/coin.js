@@ -117,6 +117,7 @@ class Coin {
         this.createCoin(this.coinGeometry, this.coinMaterial);
         this.angle = 0;
         this.dist = 0;
+        this.mesh.castShadow = true;
     }
     createCoin(coinGeometry, coinMaterial){
         this.mesh = new Mesh(coinGeometry, coinMaterial);

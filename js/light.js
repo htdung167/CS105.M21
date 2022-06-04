@@ -5,7 +5,7 @@ import {
 
 export class Light{
 constructor(){
-    this.hemisphereLight = new HemisphereLight(0xaaaaaa,0x000000, .9)
+    this.hemisphereLight = new HemisphereLight(0xaaaaaa,0x000000, .9);
     this.shadowLight = new DirectionalLight(0xffffff, .9);
     this.shadowLight.position.set(150, 350, 350);
     this.shadowLight.castShadow = true;

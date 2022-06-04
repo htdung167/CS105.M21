@@ -35,5 +35,6 @@ export class Sea {
       flatShading: true,
     });
     this.mesh = new Mesh(this.geom, this.mat);
+    this.mesh.receiveShadow = true;
   }
 }
