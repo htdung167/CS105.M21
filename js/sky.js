@@ -37,6 +37,8 @@ export class Cloud {
       // Số cube trong 1 đám mây
       this.nBlocs = 3 + Math.floor(Math.random() * 3); //3 -> 5 đám mây
       this.createCloud(this.cloudGeometry, this.cloudMaterial, this.nBlocs);
+      this.mesh.castShadow = true;
+      this.mesh.receiveShadow = true;
     }
   
     createCloud(cloudGeometry, cloudMaterial, nBlocs) {
@@ -91,6 +93,8 @@ export class Sky {
     // Rải các đám mây trên trời theo góc bằng nhau
     this.stepAngle = Math.PI * 2 / this.nClouds; 
     this.createClouds(this.nClouds);  
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
   }
 
   createClouds(nClouds){

@@ -122,6 +122,8 @@ class Game {
     this.light = this.createLight();
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
+    // this.scene.add(this.light.helperShadowLight);
+    // this.scene.add(this.light.helperShadowCamera);
     // Add ennemy
     this.ennemiesHolder = this.createEnnemy(50);
     this.scene.add(this.ennemiesHolder.mesh);
@@ -174,7 +176,7 @@ class Game {
   createScene() {
     const scene = new Scene();
     scene.background = new Color(0xffcc99);
-    scene.fog = new Fog(0xf7d9aa, 100, 950);
+    // scene.fog = new Fog(0xf7d9aa, 100, 950);
     return scene;
   }
 
@@ -202,6 +204,8 @@ class Game {
     const height = canvas.clientHeight * pixelRatio;
     renderer.setSize(width, height, false);
     renderer.setPixelRatio(window.devicePixelRatio);
+
+    renderer.shadowMap.enabled = true; 
     return renderer;
   }
 
@@ -209,8 +213,7 @@ class Game {
     const light = new Light();
     return light;
   }
-
-
+  
   //Create Plane
   createPlane(canvas) {
     const plane = new Plane();
@@ -246,6 +249,7 @@ class Game {
     sky.mesh.tick = () => {
       sky.updateRotation(this.speed);
     };
+    sky.mesh.castShadow = true;
     return sky;
   }
 
