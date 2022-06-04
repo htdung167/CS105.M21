@@ -37,8 +37,10 @@ export class EnnemiesHolder {
     }
   }
   spawnEnnemies(level) {
+    console.log("spawnEnnemies: " + level);
+    let hSea = 1160;
+    let amplitude = 80;
     for (let i = 0; i < level; i++) {
-      console.log("spawn: " + level);
       var ennemy;
       if (this.ennemiesPool.length > 0) {
         ennemy = this.ennemiesPool.pop();
@@ -47,12 +49,16 @@ export class EnnemiesHolder {
       }
       this.mesh.add(ennemy.mesh);
 
-      ennemy.angle = -(i * 100);
-      ennemy.dist = 1200 + Math.random() * 100;
-      ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist - Math.random() * 50;
+      ennemy.angle = -(i * 0.1);
+      ennemy.dist = hSea + ( Math.random() * 2) * (amplitude-20);
+      ennemy.mesh.position.y =  100 + Math.sin(ennemy.angle) * ennemy.dist ;
+      console.log("pos y: " + ennemy.mesh.position.y);
       ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.position.z = 0;
-
+      // ennemy.mesh.position.z = -70;
+      // if (ennemy.mesh.position.y > 45) {
+      //   ennemy.mesh.position.y = 45;
+      // }
+      this.mesh.add(ennemy.mesh);
       this.ennemiesInUse.push(ennemy);
     }
   }

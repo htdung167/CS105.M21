@@ -275,10 +275,10 @@ class Game {
       // ennemiesHolder.mesh.rotation.z += 0.001;
       ennemiesHolder.RotationEnnemy(this.speed);
       ennemiesHolder.touchPlane(this.plane, delta_pos);
-      let rand = Math.floor(Math.random() * 200);
+      let rand = Math.floor(Math.random() * 250);
       // console.log(rand);
 
-      if (rand == 2 || rand == 76) {
+      if (rand == 2 || rand == 86) {
         // console.log("Pool:", coinsHolder.coinsPool.length);
         // console.log("InUse:", coinsHolder.coinsInUse.length);
          ennemiesHolder.spawnEnnemies(this.level);
@@ -294,6 +294,7 @@ class Game {
           audio.setBuffer(buffer);
           audio.setLoop(false);
           audio.play();
+          this.level = 1;
         });
 
         this.status='gameover';
