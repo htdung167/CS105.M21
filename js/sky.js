@@ -104,7 +104,6 @@ export class Sky {
       let h = 1600 + Math.random() * 100; // Khoảng cách từ tâm tới đám mây
       // Vị trí đám mây
       cloud.setPosition(Math.cos(a) * h, Math.sin(a) * h + 100, - 400 - Math.random() * 400)
-
       // Xoay đám mây hướng vào trục z
       cloud.mesh.rotation.z = a + Math.PI / 2;  
       // Set độ sâu của đám mây
