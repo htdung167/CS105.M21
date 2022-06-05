@@ -361,11 +361,12 @@ class Game {
     // console.log(this.oldScoreValue)
     this.checkGameOver();
     this.countLoop += 1;
-    // console.log(this.speed);
+  
 
-    if(this.counLoop % 1000 == 0){
+    if(this.countLoop % 1000 == 0){
       this.speed += this.increaseSpeed;
       this.level += 1;
+      
       // Thêm hàm tăng số đá ở đây
       // Thay Bg
       if (this.flagBrightness){
