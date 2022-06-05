@@ -123,8 +123,8 @@ class Game {
     this.light = this.createLight();
     this.scene.add(this.light.hemisphereLight);
     this.scene.add(this.light.shadowLight);
-    this.scene.add(this.light.helperShadowLight);
-    this.scene.add(this.light.helperShadowCamera);
+    // this.scene.add(this.light.helperShadowLight);
+    // this.scene.add(this.light.helperShadowCamera);
     // this.scene.add(new CameraHelper(this.light.shadowLight.shadow.camera))
     // Add ennemy
     this.ennemiesHolder = this.createEnnemy(50);
