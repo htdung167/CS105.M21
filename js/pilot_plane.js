@@ -23,12 +23,27 @@ export class Pilot {
     this.mesh.add(this.body);
 
     var faceGeom = new BoxGeometry(10, 10, 10);
-    var faceMat = new MeshLambertMaterial({ color: 0xffc1c1 });
+
+    var faceMat = new MeshLambertMaterial({ 
+      color: 0xffc1c1,
+      flatShading: true
+     });
+    // var faceMat = new MeshPhongMaterial({
+    //   color: 0xffc1c1,
+    //   flatShading: true,
+    // });
     this.face = new Mesh(faceGeom, faceMat);
     this.mesh.add(this.face);
 
     var hairGeom = new BoxGeometry(4, 4, 4);
-    var hairMat = new MeshLambertMaterial({ color: 0x000000 });
+    var hairMat = new MeshLambertMaterial({ 
+      color: 0x00FF00,
+      flatShading: true });
+    // var hairMat = new MeshPhongMaterial({
+    //   color: 0x00FF00,
+    //   flatShading: true,
+    // });
+
     this.hair = new Mesh(hairGeom, hairMat);
     this.hair.geometry.applyMatrix4(new Matrix4().makeTranslation(0, 2, 0));
     this.hairs = new Group();
@@ -65,7 +80,10 @@ export class Pilot {
     this.mesh.add(this.hairs);
 
     var glassGeom = new BoxGeometry(5, 5, 5);
-    var glassMat = new MeshLambertMaterial({ color: 0x00dd00 });
+    var glassMat = new MeshLambertMaterial({ 
+      color: 0x0000AA , 
+      flatShading:true,
+    });
     this.glassR = new Mesh(glassGeom, glassMat);
     this.glassR.position.set(6, 0, 3);
     this.glassL = this.glassR.clone();
@@ -93,19 +111,13 @@ export class Plane {
     // Cabin
 
     var geomCabin = new BoxGeometry(80, 50, 50, 1, 1, 1);
+
     var matCabin = new MeshPhongMaterial({
       color: 0xcd5555,
       flatShading: true,
+      specular:0xcd5555,
+      shininess:50,
     });
-    // console.log(geomCabin.vertices[x]);
-    // geomCabin.vertices[4].y -= 10;
-    // geomCabin.vertices[4].z += 20;
-    // geomCabin.vertices[5].y -= 10;
-    // geomCabin.vertices[5].z -= 20;
-    // geomCabin.vertices[6].y += 30;
-    // geomCabin.vertices[6].z += 20;
-    // geomCabin.vertices[7].y += 30;
-    // geomCabin.vertices[7].z -= 20;
 
     this.cabin = new Mesh(geomCabin, matCabin);
     this.cabin.castShadow = true;
@@ -118,6 +130,8 @@ export class Plane {
     var matEngine = new MeshPhongMaterial({
       color: 0xffffff,
       flatShading: true,
+      specular:0xffffff,
+      shininess:150,
     });
     this.engine = new Mesh(geomEngine, matEngine);
     this.engine.position.x = 50;
@@ -272,18 +286,14 @@ export class Plane {
     var pc = (nv - vmin) / dv;
     var dt = tmax - tmin;
     var tv = tmin + pc * dt;
-    // var tv = tmin + (v + 1) / 2 * dt;
-
     return tv;
   }
 
   updatePlane(mousePos) {
-    var targetY = this.normalize(mousePos.y, -0.75, 1.5, 158, 350);
+    var targetY = this.normalize(mousePos.y, -0.75, 0.75, 160, 300);
     var targetX = this.normalize(mousePos.x, -0.75, 0.75, -200, 200);
     this.mesh.position.y = targetY;
     this.mesh.position.x = targetX;
-    // this.propeller.rotation.x += 0.3;
-    // console.log(mousePos);
   }
 
   animatePlane(){
