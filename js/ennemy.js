@@ -1,26 +1,30 @@
 import {
   TetrahedronGeometry,
   MeshPhongMaterial,
+  CylinderGeometry,
   Mesh,
   Object3D,
   Group,
+  Matrix4,
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
 export class Ennemy {
   constructor() {
-    this.geom = new TetrahedronGeometry(10, 2);
+    this.geom = new CylinderGeometry(0, Math.random()*2 + 4, Math.random()*2 + 15, 15, 1, false);
+    // this.geom.applyMatrix4(new Matrix4().makeRotationX(-2*Math.PI));
     this.mat = new MeshPhongMaterial({
       color: 0xa52a2a,
       shininess: 0,
       flatShading: true,
     });
     this.mesh = new Mesh(this.geom, this.mat);
+    this.mesh.rotation.z = Math.PI / 2;
     this.mesh.castShadow = true;
     this.angle = 0;
     this.dist = 0;
   }
   updateRotationZ() {
-    this.mesh.rotation.z += 0.1;
+    this.mesh.rotation.x += 0.1;
   }
 }
 export class EnnemiesHolder {
@@ -98,7 +102,7 @@ export class EnnemiesHolder {
       }
       ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
       ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
-      ennemy.mesh.rotation.y += 0.01 + (Math.random() * 2) / 10;
+      ennemy.mesh.rotation.x += 0.01 + (Math.random() * 2) / 10;
     }
   }
 }
