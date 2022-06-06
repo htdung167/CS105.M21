@@ -27,12 +27,9 @@ export class Cloud {
       this.mesh = new Group();
       this.listUse = [];
       // Tạo cloud geometry
-      this.cloudGeometry = new BoxBufferGeometry(20, 20, 20);
-      // Tạo cloud material
-      // this.cloudMaterial = new MeshPhongMaterial({color : Colors.white});
+      this.cloudGeometry = new BoxGeometry(20, 20, 20);
       this.cloudMaterial = new MeshPhongMaterial({
         color: new Color(0xcFFFFF),
-        transparent: true,
       });
       // Số cube trong 1 đám mây
       this.nBlocs = 3 + Math.floor(Math.random() * 3); //3 -> 5 đám mây
@@ -51,15 +48,12 @@ export class Cloud {
         m.position.z = Math.random() * 10;
         m.rotation.z = Math.random() * Math.PI * 2;
         m.rotation.y =  Math.random() * Math.PI * 2;
-  
         //Set size cho cube
         let s = 0.1 + Math.random() * 1.7;
         m.scale.set(s, s, s);
-  
         // Đổ bóng
         m.castShadow = true;
         m.receiveShadow = true;
-  
         // Thêm cube vào group
         this.mesh.add(m);
         this.listUse.push(m);
@@ -100,11 +94,13 @@ export class Sky {
   createClouds(nClouds){
     for(let i = 0; i < nClouds; i++){
       let cloud = new Cloud();
-      let a = this.stepAngle * i;
-      let h = 1600 + Math.random() * 100; // Khoảng cách từ tâm tới đám mây
+      let a = Math.PI * 2 / nClouds * i;
+      // Khoảng cách từ tâm tới đám mây
+      let h = 1600 + Math.random() * 100; 
       // Vị trí đám mây
-      cloud.setPosition(Math.cos(a) * h, Math.sin(a) * h + 100, - 400 - Math.random() * 400)
-      // Xoay đám mây hướng vào trục z
+      cloud.setPosition(Math.cos(a) * h, 
+              Math.sin(a) * h + 100, - 400 - Math.random() * 400)
+      // Xoay đám mây hướng vào tâm
       cloud.mesh.rotation.z = a + Math.PI / 2;  
       // Set độ sâu của đám mây
       let s = 0.5 + Math.random() * 2;

@@ -21,7 +21,7 @@ import {
   } from "https://unpkg.com/three@0.137.5/build/three.module.js";
   
   import { Plane } from "./pilot_plane.js";
-  import { Sky } from "./sky.js";
+  import { Sky, Cloud } from "./sky.js";
   import { Sea } from "./sea.js ";
   import { Light } from "./light.js";
   import { Ennemy, EnnemiesHolder } from "./ennemy.js";
@@ -48,63 +48,42 @@ import {
       this.renderer = this.createRenderer(canvas);
   
       this.plane = this.createPlane(canvas);
-      this.scene.add(this.plane.mesh);
+      // this.scene.add(this.plane.mesh);
       // Add sky
-    //   this.sky = this.createSky(50);
-    //   this.scene.add(this.sky.mesh);
-    //   // Add sea
-    //   this.sea = this.createSea();
-    //   this.scene.add(this.sea.mesh);
+      // this.sky = this.createSky(100);
+      // this.scene.add(this.sky.mesh.children[50]);
+      this.cloud = this.createCloud();
+      // this.scene.add(this.cloud.mesh);
+      // Add sea
+      this.sea = this.createSea();
+      // this.scene.add(this.sea.mesh);
+
     //   // Add light
       this.light = this.createLight();
       this.scene.add(this.light.hemisphereLight);
       this.scene.add(this.light.shadowLight);
-    //   // this.scene.add(this.light.helperShadowLight);
-    //   // this.scene.add(this.light.helperShadowCamera);
-    //   // this.scene.add(new CameraHelper(this.light.shadowLight.shadow.camera))
     //   // Add ennemy
     //   this.ennemiesHolder = this.createEnnemy(50);
     //   this.scene.add(this.ennemiesHolder.mesh);
+    this.aEnnemy = this.createAEnnemy(5);
+    // this.scene.add(this.aEnnemy.mesh);
     //   // Add coin test
-    //   this.chaincoins = this.createCoin(500);
-    //   this.scene.add(this.chaincoins.mesh);
-  
-    //   // score
-    //   // this.score = 0;
-  
-    //   // speed
-      this.initSpeed = 0.001;
-      this.speed = 0.001;
-      this.increaseSpeed = 0.001;
-      this.countLoop = 1;
-      this.level = 1;
-  
-      // game status
-      this.status = 'playing'
-      // this.status = 'gameover'
-      this.oldScoreValue = 0;
-      this.scoreValue = 0;
-      this.score = document.getElementById("score_playing");
-      this.can = document.getElementById("webglOutput");
-  
-      document.getElementById('play_icon').click();
+      // this.chaincoins = this.createCoin(500);
+      // this.scene.add(this.chaincoins.mesh);
+      this.aCoin = this.createACoin();
+      this.scene.add(this.aCoin.mesh);
+
       this.handleResize();
       //Render
       this.render(1);
   
-      // Xử lý replay game
-      document.addEventListener('mousedown', () => {
-        if(this.status==='gameover'){
-          this.playingGame();
-        }
-      }, false)
     }
   
     // Create Scene
     createScene() {
       const scene = new Scene();
       scene.background = new Color(0xffcc99);
-      scene.fog = new Fog(0xf7d9aa, 100, 950);
+      // scene.fog = new Fog(0xf7d9aa, 100, 950);
       return scene;
     }
   
@@ -114,7 +93,7 @@ import {
       const height = canvas.clientHeight;
       const aspectRatio = width / height;
       const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-      camera.position.set(0, 200, 150);
+      camera.position.set(0, 200, 300);
       // camera.position.set(0, 200, 200);
   
   
@@ -152,16 +131,6 @@ import {
       plane.mesh.position.y = 200;
       plane.mesh.position.x = 0;
       plane.mesh.position.z = 100;
-  
-    //   document.addEventListener("mousemove", (event) => {
-    //     const width = canvas.clientWidth;
-    //     const height = canvas.clientHeight;
-    //     var tx = -1 + (event.clientX / width) * 2;
-    //     var ty = 1 - (event.clientY / height) * 2;
-    //     mousePos = { x: tx, y: ty };
-    //     this.plane.updatePlane(mousePos);
-    //   });
-  
       plane.mesh.tick = () => {
         plane.mesh.rotation.y += 0.01;
         plane.animatePlane();
@@ -179,15 +148,27 @@ import {
       sky.mesh.castShadow = true;
       return sky;
     }
+
+    createCloud(){
+      const cloud = new Cloud();
+      cloud.setPosition(0, 250, 0);
+      cloud.mesh.tick = () => {
+        cloud.updateRotation();
+        // cloud.mesh.rotation.y += 0.1;
+      }
+      return cloud;
+
+    }
+
     createSea() {
       const sea = new Sea();
       sea.mesh.position.y = -550;
-  
       sea.mesh.tick = (ms) => {
-        sea.mesh.rotation.z += this.speed;
+        sea.mesh.rotation.z += 0.01;
       };
       return sea;
     }
+
     createEnnemy(nEnnemies) {
       // var nEnnemies = 50; // game level
       const ennemiesHolder = new EnnemiesHolder(nEnnemies);
@@ -208,119 +189,103 @@ import {
         // console.log(rand);
   
         if (rand == 2 || rand == 86) {
-          // console.log("Pool:", coinsHolder.coinsPool.length);
-          // console.log("InUse:", coinsHolder.coinsInUse.length);
            ennemiesHolder.spawnEnnemies(this.level);
-        }
-        // Tiếng va chạm
-        if(ennemiesHolder.ennemiesTouched){
-          let audioLoader = new AudioLoader();
-          let listener = new AudioListener();
-          let audio = new Audio(listener);
-          let stream = "./sound/crash.mp3"
-          audioLoader.load(stream, function(buffer) {
-            audio.setBuffer(buffer);
-            audio.setLoop(false);
-            audio.play();
-          });
-          this.level = 1;
-          this.status='gameover';
-          this.score.style.display = "none";
-          document.getElementById('game-over-container').style.display='block';
-          
         }
       };
       return ennemiesHolder;
     }
+
+    createAEnnemy(nEnnemies){
+      const ennemiesHolder = new EnnemiesHolder();
+      ennemiesHolder.mesh.position.x = 0;
+      ennemiesHolder.mesh.position.y = -1000;
+      ennemiesHolder.mesh.position.z = -70;
+      ennemiesHolder.spawnEnnemies(nEnnemies);
+      for (let i = 0; i < ennemiesHolder.ennemiesInUse.length; i++) {
+        let ennemy = ennemiesHolder.ennemiesInUse[i];
+        ennemy.angle += 0.7;
+      }
+
+      ennemiesHolder.mesh.tick = (ms) => {
+        for (let i = 0; i < ennemiesHolder.ennemiesInUse.length; i++) {
+          let ennemy = ennemiesHolder.ennemiesInUse[i];
+          ennemy.mesh.position.y = Math.sin(ennemy.angle) * ennemy.dist;
+          ennemy.mesh.position.x = Math.cos(ennemy.angle) * ennemy.dist;
+          ennemy.mesh.rotation.x += 0.01 + (Math.random() * 2) / 10;
+        }
+      };
+      return ennemiesHolder;
+    }
+
     createCoin() {
       const coinsHolder = new ChainCoin(20);
       let delta_x = 0;
       let delta_y = -1100;
       let delta_z = -70;
-      let delta_pos = new Vector3(delta_x, delta_y, delta_z);
       coinsHolder.mesh.position.x = delta_x;
       coinsHolder.mesh.position.y = delta_y;
       coinsHolder.mesh.position.z = delta_z;
-      // Thêm nhạc khi chạm
-      let audioLoader = new AudioLoader();
-      let listener = new AudioListener();
-      let audio = new Audio(listener);
-      let stream = "./sound/coin_audio.mp3"
+      
       coinsHolder.mesh.tick = (ms) => {
         coinsHolder.rotationCoins(this.speed);
-        coinsHolder.touchPlane(this.plane, delta_pos);
+        // coinsHolder.touchPlane(this.plane, delta_pos);
         let rand = Math.floor(Math.random() * 100);
         if (rand == 16 || rand == 7) {
           coinsHolder.spawnCoins();
         }
-        this.scoreValue = coinsHolder.coinsTouched;
-        this.score.innerHTML = "Score: " + this.scoreValue + " Level: " + this.level;
-        // Thêm nhạc khi va chạm 
-        if(this.status === 'playing'){
-          if(this.scoreValue != this.oldScoreValue && this.scoreValue != 0){
-            this.oldScoreValue = this.scoreValue
-            if(audio.isPlaying){
-              audio.stop();
-            }
-            audioLoader.load(stream, function(buffer) {
-              audio.setBuffer(buffer);
-              audio.setLoop(false);
-              audio.play();
-            });
-          }
-        }
       };
       return coinsHolder;
     }
-    // Hàm check nếu game over set lại các tham số
-    checkGameOver(){
-      if(this.status==='gameover'){
-        document.getElementById("score_gameover").innerHTML = "Score: " + this.oldScoreValue; // Set score cuối cùng
-        this.speed=this.initSpeed; // Đặt lại speed như ban đầu
-        this.chaincoins.coinsTouched = 0; // Set số coin đã chạm về 0
-        this.scoreValue = 0; // Set score về 0
-        this.countLoop = 0;
-        this.level = 1;
-        this.ennemiesHolder.ennemiesTouched = false; // Set lại ennemiesTouched = false (chưa chạm)
-        // Cho plane ở vị trí cố định (góc never die)
-        this.plane.mesh.position.x = -160;
-        this.plane.mesh.position.y = 300;
-        this.plane.mesh.position.z = -70;
+
+    createACoin(){
+      const coinsHolder = new ChainCoin(20);
+      coinsHolder.mesh.position.x = 0;
+      coinsHolder.mesh.position.y = -1100;
+      coinsHolder.mesh.position.z = -70;
+      coinsHolder.spawnCoins();
+      let s = 1;
+      coinsHolder.mesh.scale.set(s, s, s);
+
+      for(let i = 0; i < coinsHolder.coinsInUse.length; i++){
+        let coin = coinsHolder.coinsInUse[i];
+        coin.angle += 1.7; 
       }
+
+      coinsHolder.mesh.tick = (ms) => {
+        for(let i = 0; i < coinsHolder.coinsInUse.length; i++){
+          let coin = coinsHolder.coinsInUse[i];
+          coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
+          coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
+          coin.mesh.rotation.y += 0.1 ; 
+      }
+
+      };
+      return coinsHolder;
     }
-    // Khi listen thấy mouse up thì gọi hàm này, set lại các tham số
-    playingGame(){
-      this.status = 'playing' // Trả lại trạng thái playing
-      document.getElementById('game-over-container').style.display = 'none'; // Ẩn button play
-      this.score.style.display='block' // Hiển thị lại score
-    }
-  
+
+    // Hàm check nếu game over set lại các tham số
     update(ms) {
-      // console.log(this.oldScoreValue)
-    //   this.checkGameOver();
-    //   this.countLoop += 1;
-    
-  
-    //   if(this.countLoop % 1000 == 0){
-    //     this.speed += this.increaseSpeed;
-    //     this.level += 1;
-        
-    //     // Thêm hàm tăng số đá ở đây
-    //     // Thay Bg
-    //     if (this.flagBrightness){
-    //       this.scene.background = new Color(0x003366); 
-    //       this.flagBrightness = false;
-    //     }
-    //     else{
-    //       this.scene.background = new Color(0xffcc99);
-    //       this.flagBrightness = true;
-    //     }
-    //   }
     //   this.sky.mesh.tick();
     //   this.sea.mesh.tick();
     //   this.ennemiesHolder.mesh.tick();
-    //   this.chaincoins.mesh.tick();
-      this.plane.mesh.tick();
+      // this.chaincoins.mesh.tick();
+      if(this.hasOwnProperty("plane")){
+        this.plane.mesh.tick();
+      }
+      if(this.hasOwnProperty("cloud"))
+      {
+        this.cloud.mesh.tick();
+      }
+      if(this.hasOwnProperty("aCoin"))
+      {
+        this.aCoin.mesh.tick();
+      }
+      if(this.hasOwnProperty("aEnnemy")){
+        this.aEnnemy.mesh.tick();
+      }
+      if(this.hasOwnProperty("sea")){
+        this.sea.mesh.tick();
+      }
     }
   
     render(ms = 10000) {

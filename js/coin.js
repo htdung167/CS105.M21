@@ -47,11 +47,12 @@ export class ChainCoin {
                 coin = new Coin();
             }
             // coin = new Coin();
-            this.mesh.add(coin.mesh);   
             coin.angle = -(i * 0.02)
             coin.dist = hCoins + Math.cos(i*0.5)*amplitude;
             coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
+            this.mesh.add(coin.mesh);   
+            
             // coin.mesh.position.z = ; 
             this.coinsInUse.push(coin);
 
@@ -66,7 +67,7 @@ export class ChainCoin {
                 this.mesh.remove(coin.mesh);
                 i--;
             }
-            coin.mesh.position.y = coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
+            coin.mesh.position.y = Math.sin(coin.angle) * coin.dist;
             coin.mesh.position.x = Math.cos(coin.angle) * coin.dist;
             coin.mesh.rotation.y += 0.1 + (Math.random() * 2) / 10; 
             
@@ -89,14 +90,6 @@ export class ChainCoin {
                 i--;
                 // CỘng điểm
                 this.coinsTouched += 1;
-                // let faudio = "./audio/coin_audio.mp3"
-                // var audio = new Audio(faudio);
-                // audio.play();
-                // // this.audioLoader.load(faudio, function(buffer){
-                //     this.audio.setBuffer(buffer);
-                //     this.audio.setLoop(true);
-                //     this.audio.play();
-                // });
             }
 
             
@@ -109,19 +102,14 @@ export class ChainCoin {
 
 class Coin {
     constructor(){
-        this.mesh = new Mesh();
         this.coinGeometry = new TorusGeometry(2, 1, 5, 8);
         this.coinMaterial = new MeshPhongMaterial({
             color: new Color(0xFFFF00),
-            transparent: true,
           });
-        this.createCoin(this.coinGeometry, this.coinMaterial);
+          this.mesh = new Mesh(this.coinGeometry, this.coinMaterial);
+        
         this.angle = 0;
         this.dist = 0;
         this.mesh.castShadow = true;
-    }
-    createCoin(coinGeometry, coinMaterial){
-        this.mesh = new Mesh(coinGeometry, coinMaterial);
-        // this.mesh.castShadow = true;
     }
 }
