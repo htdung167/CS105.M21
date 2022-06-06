@@ -228,6 +228,7 @@ class Game {
 
     plane.mesh.tick = () => {
       plane.animatePlane();
+      
     };
     return plane;
   }
