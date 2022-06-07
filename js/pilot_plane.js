@@ -27,6 +27,18 @@ export class Pilot {
     this.body.position.set(2, -12, 0);
     this.mesh.add(this.body);
 
+    var armgeom = new BoxGeometry(3, 15, 3, 1, 1, 1);
+    var armmat = new MeshPhongMaterial({
+      color: 0xa2007c,
+      flatShading: true,
+    });
+    this.armR = new Mesh(armgeom, armmat);
+    this.armR.position.set(3, -15, 15);
+    this.mesh.add(this.armR);
+    this.armL = this.armR.clone();
+    this.armL.position.set(3, -15, -15);
+    this.mesh.add(this.armL);
+
     var faceGeom = new BoxGeometry(10, 10, 10);
 
     var faceMat = new MeshLambertMaterial({ 
@@ -238,6 +250,7 @@ export class Plane {
     var wheelProtecR = new Mesh(wheelProtecGeom, wheelProtecMat);
     wheelProtecR.position.set(10, -10, 20);
     wheelProtecR.applyMatrix4(new Matrix4().makeRotationZ(-Math.PI / 2));
+    wheelProtecR.castShadow = true;
     this.mesh.add(wheelProtecR);
 
     var firegeom = new SphereGeometry(20,32,4,2*Math.PI,2*Math.PI,1.9,3.5);
@@ -289,6 +302,7 @@ export class Plane {
 
     var wheelProtecL = wheelProtecR.clone();
     wheelProtecL.position.z = -wheelProtecR.position.z;
+    wheelProtecL.castShadow = true;
     this.mesh.add(wheelProtecL);
 
     var wheelTireL = wheelTireR.clone();

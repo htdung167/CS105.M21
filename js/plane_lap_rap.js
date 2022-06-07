@@ -126,7 +126,7 @@ export class Plane {
   constructor() {
     this.mesh = new Object3D();
     this.mesh.name = "plane";
-    // Cabin
+    // // Cabin
 
     // var geomCabin = new BoxGeometry(80, 40, 50, 1, 1, 1);
 
@@ -142,9 +142,9 @@ export class Plane {
     // this.cabin.receiveShadow = true;
     // this.mesh.add(this.cabin);
 
-    // // Engine
+    // Engine
 
-    // // var geomEngine = new BoxGeometry(20, 50, 50, 1, 1, 1);
+    // var geomEngine = new BoxGeometry(20, 50, 50, 1, 1, 1);
     // var geomEngine = new CylinderGeometry(4, 20, 40, 32, 1, false, 0);
     // var matEngine = new MeshPhongMaterial({
     //   color: 0xffffff,
@@ -273,9 +273,9 @@ export class Plane {
     // this.fireR.applyMatrix4(new Matrix4().makeRotationZ(Math.PI / 2));
     // this.mesh.add(this.fireR);
 
-    // this.fireL = this.fireR.clone();
-    // this.fireL.position.z = -this.fireR.position.z;
-    // this.mesh.add(this.fireL);
+    // // this.fireL = this.fireR.clone();
+    // // this.fireL.position.z = -this.fireR.position.z;
+    // // this.mesh.add(this.fireL);
 
     // var firev2geom = new SphereGeometry(
     //   10,32,4,2 * Math.PI,2 * Math.PI,1.9,3.5
@@ -301,15 +301,15 @@ export class Plane {
     // var wheelTireR = new Mesh(wheelTireGeom, wheelTireMat);
     // wheelTireR.position.set(40, -30, 40);
 
-    // var wheelAxisGeom = new BoxGeometry(10, 10, 6);
-    // var wheelAxisMat = new MeshPhongMaterial({
-    //   color: 0xcd6839,
-    //   flatShading: true,
-    // });
-    // var wheelAxis = new Mesh(wheelAxisGeom, wheelAxisMat);
-    // wheelTireR.add(wheelAxis);
+      // var wheelAxisGeom = new BoxGeometry(10, 10, 6);
+      // var wheelAxisMat = new MeshPhongMaterial({
+      //   color: 0xcd6839,
+      //   flatShading: true,
+      // });
+      // var wheelAxis = new Mesh(wheelAxisGeom, wheelAxisMat);
+      // wheelTireR.add(wheelAxis);
 
-    // this.mesh.add(wheelTireR);
+      // this.mesh.add(wheelTireR);
 
     // var wheelProtecL = wheelProtecR.clone();
     // wheelProtecL.position.z = -wheelProtecR.position.z;

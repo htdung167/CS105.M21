@@ -180,7 +180,7 @@ class Game {
     const height = canvas.clientHeight;
     const aspectRatio = width / height;
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-    camera.position.set(0, 200, 150);
+    camera.position.set(0, 200, 200);
     // camera.position.set(0, 200, 200);
     return camera;
   }
