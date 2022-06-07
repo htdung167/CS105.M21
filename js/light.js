@@ -7,8 +7,8 @@ import {
 
 export class Light{
 constructor(){
-    this.hemisphereLight = new HemisphereLight(0xaaaaaa,0x000000, .9);
-    this.shadowLight = new DirectionalLight(0xffffff, .9);
+    this.hemisphereLight = new HemisphereLight(0xaaaaaa,0x000000, 0.9);
+    this.shadowLight = new DirectionalLight(0xffffff, 0.9);
     this.shadowLight.position.set(150, 350, 250);
     this.shadowLight.castShadow = true;
     this.shadowLight.shadow.camera.left = -400;

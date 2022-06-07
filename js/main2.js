@@ -1,24 +1,25 @@
   
 import {
-    Scene,
-    PerspectiveCamera,
-    WebGLRenderer,
-    Color,
-    Fog,
-    Vector3,
-    Mesh,
-    BoxGeometry,
-    MeshNormalMaterial,
-    AxesHelper,
-    MeshPhongMaterial,
-    BoxBufferGeometry,
-    Group,
-    AudioLoader,
-    AudioListener,
-    Audio,
-    CameraHelper
-    // requestAnimationFrame
-  } from "https://unpkg.com/three@0.137.5/build/three.module.js";
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  Color,
+  Fog,
+  Vector3,
+  Mesh,
+  BoxGeometry,
+  MeshNormalMaterial,
+  AxesHelper,
+  MeshPhongMaterial,
+  BoxBufferGeometry,
+  Group,
+  AudioLoader,
+  AudioListener,
+  Audio,
+  CameraHelper,
+  Matrix4,  
+  // requestAnimationFrame
+} from "https://unpkg.com/three@0.137.5/build/three.module.js";
   
   import { Plane } from "./pilot_plane.js";
   import { Sky, Cloud } from "./sky.js";
@@ -93,7 +94,7 @@ import {
       const height = canvas.clientHeight;
       const aspectRatio = width / height;
       const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
-      camera.position.set(0, 200, 300);
+      camera.position.set(0, 205, 180);
       // camera.position.set(0, 200, 200);
   
   
@@ -130,10 +131,21 @@ import {
       plane.mesh.scale.set(0.25, 0.25, 0.25);
       plane.mesh.position.y = 200;
       plane.mesh.position.x = 0;
-      plane.mesh.position.z = 100;
+      plane.mesh.position.z = -100;
+      plane.mesh.applyMatrix(new Matrix4().makeRotationY(-Math.PI));
+  
+    //   document.addEventListener("mousemove", (event) => {
+    //     const width = canvas.clientWidth;
+    //     const height = canvas.clientHeight;
+    //     var tx = -1 + (event.clientX / width) * 2;
+    //     var ty = 1 - (event.clientY / height) * 2;
+    //     mousePos = { x: tx, y: ty };
+    //     this.plane.updatePlane(mousePos);
+    //   });
+  
       plane.mesh.tick = () => {
         plane.mesh.rotation.y += 0.01;
-        plane.animatePlane();
+        // plane.animatePlane();
       };
       return plane;
     }

@@ -26,6 +26,7 @@ var Colors = {
 export class Sea {
   constructor() {
     // this.mesh = new Group();
+    
     this.geom = new CylinderGeometry(700, 700, 600, 40, 10);
     this.geom.applyMatrix4(new Matrix4().makeRotationX(-Math.PI/2));
     this.mat = new MeshPhongMaterial({

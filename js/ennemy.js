@@ -6,14 +6,33 @@ import {
   Object3D,
   Group,
   Matrix4,
+  Color,
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 
+var Colors = {
+  red: 0xf25346,
+  white: 0xd8d0d1,
+  pink: 0xf5986e,
+  brown: 0x59332e,
+  brownDark: 0x23190f,
+  blue: 0x68c3c0,
+};
 export class Ennemy {
   constructor() {
+    this.Colors = {
+      red: 0xf25346,
+      white: 0xd8d0d1,
+      pink: 0xf5986e,
+      brown: 0x59332e,
+      brownDark: 0x23190f,
+      blue: 0x68c3c0,
+    };
+    this.key =  Math.floor(Math.random() * 5),
+    console.log("key", this.key);
+    
     this.geom = new CylinderGeometry(0, Math.random()*2 + 4, Math.random()*2 + 15, 15, 1, false);
-    // this.geom.applyMatrix4(new Matrix4().makeRotationX(-2*Math.PI));
     this.mat = new MeshPhongMaterial({
-      color: 0xa52a2a,
+      color: new Color(this.Colors[Object.keys(this.Colors)[this.key]]),
       shininess: 0,
       flatShading: true,
     });

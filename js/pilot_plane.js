@@ -4,8 +4,13 @@ import {
   MeshPhongMaterial,
   BoxGeometry,
   MeshLambertMaterial,
+  CylinderGeometry,
   Matrix4,
   Object3D,
+  TetrahedronGeometry,
+  OctahedronGeometry,
+  SphereGeometry,
+  TorusGeometry
 } from "https://unpkg.com/three@0.137.5/build/three.module.js";
 export class Pilot {
   constructor() {
@@ -110,13 +115,13 @@ export class Plane {
     this.mesh.name = "plane";
     // Cabin
 
-    var geomCabin = new BoxGeometry(80, 50, 50, 1, 1, 1);
+    var geomCabin = new BoxGeometry(80, 40, 50, 1, 1, 1);
 
     var matCabin = new MeshPhongMaterial({
-      color: 0xcd5555,
+      color: 0x008080,
       flatShading: true,
-      specular:0xcd5555,
-      shininess:50,
+      specular: 0xcd5555,
+      shininess: 50,
     });
 
     this.cabin = new Mesh(geomCabin, matCabin);
@@ -126,7 +131,8 @@ export class Plane {
 
     // Engine
 
-    var geomEngine = new BoxGeometry(20, 50, 50, 1, 1, 1);
+    // var geomEngine = new BoxGeometry(20, 50, 50, 1, 1, 1);
+    var geomEngine = new CylinderGeometry(4,20,40,32,1,false,0);
     var matEngine = new MeshPhongMaterial({
       color: 0xffffff,
       flatShading: true,
@@ -134,7 +140,11 @@ export class Plane {
       shininess:150,
     });
     this.engine = new Mesh(geomEngine, matEngine);
-    this.engine.position.x = 50;
+    this.engine.position.x = 0;
+    this.engine.position.y = 60;
+    this.engine.applyMatrix4(new Matrix4().makeRotationX(-Math.PI / 2));
+    this.engine.applyMatrix4(new Matrix4().makeRotationY(-Math.PI / 2));
+    
     this.engine.castShadow = true;
     this.engine.receiveShadow = true;
     this.mesh.add(this.engine);
@@ -147,7 +157,7 @@ export class Plane {
       flatShading: true,
     });
     this.tailPlane = new Mesh(geomTailPlane, matTailPlane);
-    this.tailPlane.position.set(-40, 20, 0);
+    this.tailPlane.position.set(-45, 20, 0);
     this.tailPlane.castShadow = true;
     this.tailPlane.receiveShadow = true;
     this.mesh.add(this.tailPlane);
@@ -160,7 +170,7 @@ export class Plane {
       flatShading: true,
     });
     this.sideWing = new Mesh(geomSideWing, matSideWing);
-    this.sideWing.position.set(0, 15, 0);
+    this.sideWing.position.set(0, 10, 0);
     this.sideWing.castShadow = true;
     this.sideWing.receiveShadow = true;
     this.mesh.add(this.sideWing);
@@ -198,7 +208,7 @@ export class Plane {
     this.propeller.castShadow = true;
     this.propeller.receiveShadow = true;
 
-    var geomBlade = new BoxGeometry(1, 80, 10, 1, 1, 1);
+    var geomBlade = new BoxGeometry(2, 80, 10, 1, 1, 1);
     var matBlade = new MeshPhongMaterial({
       color: 0x8b4726,
       flatShading: true,
@@ -220,22 +230,52 @@ export class Plane {
     this.propeller.position.set(60, 0, 0);
     this.mesh.add(this.propeller);
 
-    var wheelProtecGeom = new BoxGeometry(30, 15, 10, 1, 1, 1);
+    var wheelProtecGeom = new CylinderGeometry(0, 15, 75, 25,18,false,10);
     var wheelProtecMat = new MeshPhongMaterial({
       color: 0x726751,
       flatShading: true,
     });
     var wheelProtecR = new Mesh(wheelProtecGeom, wheelProtecMat);
-    wheelProtecR.position.set(25, -20, 25);
+    wheelProtecR.position.set(10, -10, 20);
+    wheelProtecR.applyMatrix4(new Matrix4().makeRotationZ(-Math.PI / 2));
     this.mesh.add(wheelProtecR);
 
-    var wheelTireGeom = new BoxGeometry(24, 24, 4);
+    var firegeom = new SphereGeometry(20,32,4,2*Math.PI,2*Math.PI,1.9,3.5);
+    var firemat = new MeshPhongMaterial({
+       color: 0xC50023,
+      flatShading: true,
+    });
+    this.fireR = new Mesh(firegeom,firemat);
+    this.fireR.position.set(-10, 60, 20);
+    this.fireR.applyMatrix4(new Matrix4().makeRotationZ(Math.PI / 2));
+    this.mesh.add(this.fireR);
+    
+     this.fireL = this.fireR.clone();
+     this.fireL.position.z = -this.fireR.position.z;
+     this.mesh.add(this.fireL);
+
+    var firev2geom = new SphereGeometry(10,32,4,2*Math.PI,2*Math.PI,1.9,3.5);
+    var firev2mat = new MeshPhongMaterial({
+      color: 0xf9f400,
+      flatShading: true,
+    });
+    this.fireRv2 = new Mesh(firev2geom,firev2mat);
+    this.fireRv2.position.set(-10, 65, 20);
+    this.fireRv2.applyMatrix4(new Matrix4().makeRotationZ(Math.PI / 2));
+    this.mesh.add(this.fireRv2);
+    
+     this.fireLv2 = this.fireRv2.clone();
+     this.fireLv2.position.z = -this.fireRv2.position.z;
+     this.mesh.add(this.fireLv2);
+
+
+    var wheelTireGeom = new TorusGeometry(12, 4, 30,128, Math.PI*2);
     var wheelTireMat = new MeshPhongMaterial({
-      color: 0x8b4726,
+      color: 0xECECEC,
       flatShading: true,
     });
     var wheelTireR = new Mesh(wheelTireGeom, wheelTireMat);
-    wheelTireR.position.set(25, -28, 25);
+    wheelTireR.position.set(25, -15, 25);
 
     var wheelAxisGeom = new BoxGeometry(10, 10, 6);
     var wheelAxisMat = new MeshPhongMaterial({
@@ -255,21 +295,21 @@ export class Plane {
     wheelTireL.position.z = -wheelTireR.position.z;
     this.mesh.add(wheelTireL);
 
-    var wheelTireB = wheelTireR.clone();
-    wheelTireB.scale.set(0.5, 0.5, 0.5);
-    wheelTireB.position.set(-35, -5, 0);
-    this.mesh.add(wheelTireB);
+    // var wheelTireB = wheelTireR.clone();
+    // wheelTireB.scale.set(0.5, 0.5, 0.5);
+    // wheelTireB.position.set(-35, -5, 0);
+    // this.mesh.add(wheelTireB);
 
-    var suspensionGeom = new BoxGeometry(4, 20, 4);
-    suspensionGeom.applyMatrix4(new Matrix4().makeTranslation(0, 10, 0));
-    var suspensionMat = new MeshPhongMaterial({
-      color: 0xcd5555,
-      flatShading: true,
-    });
-    var suspension = new Mesh(suspensionGeom, suspensionMat);
-    suspension.position.set(-35, -5, 0);
-    suspension.rotation.z = -0.3;
-    this.mesh.add(suspension);
+    // var suspensionGeom = new BoxGeometry(4, 80, 4);
+    // suspensionGeom.applyMatrix4(new Matrix4().makeTranslation(0, 10, 0));
+    // var suspensionMat = new MeshPhongMaterial({
+    //   color: 0xcd5555,
+    //   flatShading: true,
+    // });
+    // var suspension = new Mesh(suspensionGeom, suspensionMat);
+    // suspension.position.set(-35, -5, 0);
+    // suspension.rotation.z = -0.3;
+    // this.mesh.add(suspension);
 
     this.pilot = new Pilot();
     this.pilot.mesh.position.set(0, 40, 0);
@@ -298,6 +338,10 @@ export class Plane {
 
   animatePlane(){
     this.propeller.rotation.x += 0.2;
+    this.fireR.rotation.x += 0.05;
+    this.fireL.rotation.x += 0.05;
+    this.fireRv2.rotation.x -= 0.01;
+    this.fireLv2.rotation.x -= 0.01;
   }
   //Check if the plane meet enneimy
   

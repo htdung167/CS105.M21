@@ -109,6 +109,8 @@ class Game {
     this.height = canvas.clientHeight;
     this.scene = this.createScene();
     this.camera = this.createCamera(canvas);
+    this.cameraHelper = new CameraHelper(this.camera);
+    // this.scene.add(this.cameraHelper);
     this.renderer = this.createRenderer(canvas);
 
     this.plane = this.createPlane(canvas);
@@ -180,8 +182,6 @@ class Game {
     const camera = new PerspectiveCamera(60, aspectRatio, 0.1, 10000);
     camera.position.set(0, 200, 150);
     // camera.position.set(0, 200, 200);
-
-
     return camera;
   }
 
@@ -228,6 +228,10 @@ class Game {
 
     plane.mesh.tick = () => {
       plane.animatePlane();
+      // plane.mesh.rotation.z += 0.1;
+      // plane.mesh.rotation.y += 0.1;
+
+      
     };
     return plane;
   }
