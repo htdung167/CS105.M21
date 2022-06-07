@@ -22,6 +22,7 @@ Từ trước đến giờ chúng ta đã khá quen thuộc với các game l
 đến máy bay, ví dụ: bắn gà, bắn máy bay,… Nhóm chúng tôi đã lấy ý tưởng
 hình tượng từ các trò chơi đó kết hợp với ý tưởng từ game khủng long và game
 sonic để xây dựng Hyper Raider Game.
+<img src="./img.gif" alt="demo" width="250" />
 
 ## **DEMO**
 **Link:** [Hyper Raider Game](https://htdung167.github.io/CS105.M21)
