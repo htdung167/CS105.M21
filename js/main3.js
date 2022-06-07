@@ -129,7 +129,7 @@ class Game {
     plane.mesh.position.x = 0;
     plane.mesh.position.z = 100;
     plane.mesh.tick = () => {
-      plane.mesh.rotation.y += 0.01;
+      plane.mesh.rotation.z += 0.01;
       plane.animatePlane();
     };
     return plane;
