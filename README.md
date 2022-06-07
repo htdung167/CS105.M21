@@ -1,6 +1,6 @@
 
 <h1 align=center>Đồ án môn Đồ họa máy tính - CS105.M21</h1>
-<h3 align=center>Hyper Raider Game</h3>
+<h2 align=center>Hyper Raider Game</h2>
 
 ## **MEMBERS**
 | ID     | Name       | Email                   |
